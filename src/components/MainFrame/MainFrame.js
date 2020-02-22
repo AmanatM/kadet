@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import SideNav from '../SideNav/SideNav'
@@ -10,12 +10,10 @@ const MainFrameStyled = styled.div`
     max-height: 100vh;
     overflow: hidden;
     display: grid;
-
     grid-template-areas:
     "nav content";
     grid-template-columns: 250px 1fr;
     grid-gap: 0px;
-
     .content {
         grid-area: 'content';
     }
@@ -67,6 +65,21 @@ const routes = [
 
 const MainFrame = () => {
 
+
+    const [ notes, setNotes ] = useState(null)
+
+    useEffect(() => {
+
+    fetch('http://localhost:3001/api/notes')
+        .then((res) => {
+            return res.json()
+        })
+        .then((notes) => {
+            setNotes(notes)
+        });
+    })
+
+
     return (
         <MainFrameStyled>
 
@@ -74,6 +87,10 @@ const MainFrame = () => {
                 <SideNav/>
 
                 <div className="content">
+
+                    
+                    {notes ? notes.map(note =>  <li key={note.id}>{note.content}</li>) : null}
+
                     <Switch>
                         {routes.map((route, index) => 
                             <Route key={index} exact path={route.path} render={() => route.component}/>
