@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link, useHistory } from 'react-router-dom'
 
 import logoIcon from '../../assets/imgs/logo.svg'
 
@@ -11,9 +11,11 @@ import contractors from './icons/contractors.svg'
 import orders from './icons/orders.svg'
 import reviews from './icons/reviews.svg'
 import reports from './icons/reports.svg'
-import history from './icons/history.svg'
+import historyIcon from './icons/history.svg'
 import settings from './icons/settings.svg'
 import logoutIcon from './icons/logout.svg'
+
+import Auth from '../../utils/Auth'
 
 
 
@@ -99,24 +101,30 @@ const Logout = styled.div`
 
 const SideNav = () => {
 
+    let history = useHistory()
+    
+    const logOut = () => {
+        Auth.signout(() => history.push("/login"));
+    }
+
 
     return (
         <SideNavSection>
             <Link to="/"><Logo><img alt="Логотип" src={logoIcon}/></Logo></Link>
             <ul>
-                <li><NavLink to='/dispatchers'><img alt='Диспетчеры' src={dipatchers}/>Диспетчеры</NavLink></li>
-                <li><NavLink to='/dealer_centers'><img alt='Диспетчерские центры' src={dealer_centers}/>Диспетчерские центры</NavLink></li>
-                <li><NavLink to='/maps'><img alt='Карты' src={maps}/>Карты</NavLink></li>
-                <li><NavLink to='/contractors'><img alt='Подрятчики' src={contractors}/>Подрятчики</NavLink></li>
-                <li><NavLink to='/orders'><img alt='Заказы' src={orders}/>Заказы</NavLink></li>
-                <li><NavLink to='/reviews'><img alt='Отзывы' src={reviews}/>Отзывы</NavLink></li>
-                <li><NavLink to='/reports'><img alt='Отчеты' src={reports}/>Отчеты</NavLink></li>
-                <li><NavLink to='/history'><img alt='История' src={history}/>История</NavLink></li>
-                <li><NavLink to='/settings'><img alt='Настройки' src={settings}/>Настройки</NavLink></li>
+                <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/>Диспетчеры</NavLink></li>
+                <li><NavLink to='/panel/dealer_centers'><img alt='Диспетчерские центры' src={dealer_centers}/>Диспетчерские центры</NavLink></li>
+                <li><NavLink to='/panel/maps'><img alt='Карты' src={maps}/>Карты</NavLink></li>
+                <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/>Подрятчики</NavLink></li>
+                <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/>Заказы</NavLink></li>
+                <li><NavLink to='/panel/reviews'><img alt='Отзывы' src={reviews}/>Отзывы</NavLink></li>
+                <li><NavLink to='/panel/reports'><img alt='Отчеты' src={reports}/>Отчеты</NavLink></li>
+                <li><NavLink to='/panel/history'><img alt='История' src={historyIcon}/>История</NavLink></li>
+                <li><NavLink to='/panel/settings'><img alt='Настройки' src={settings}/>Настройки</NavLink></li>
             </ul>
 
             <Logout>
-                <button>
+                <button onClick={logOut}>
                     <img src={logoutIcon} alt="Выйти"/>Выйти
                 </button>
             </Logout>

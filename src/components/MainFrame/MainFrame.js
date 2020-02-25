@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import SideNav from '../SideNav/SideNav'
+
+import Dispatchers from '../../pages/dispatchers/Dispatchers'
 
 
 
@@ -24,39 +26,39 @@ const DemoPage = ({name}) => <h1>{name}</h1>
 
 const routes = [
     {
-        path: '/dispatchers',
-        component: <DemoPage name={'Диспетчеры'}/>
+        path: '/panel/dispatchers',
+        component: <Dispatchers/>
     },
     {
-        path: '/dealer_centers',
+        path: '/panel/dealer_centers',
         component: <DemoPage name={'Дилерские центры'}/>,
     },
     {
-        path: '/maps',
+        path: '/panel/maps',
         component: <DemoPage name={'Карты'}/>
     },
     {
-        path: '/contractors',
+        path: '/panel/contractors',
         component: <DemoPage name={'Подрядчики'}/>
     },
     {
-        path: '/orders',
+        path: '/panel/orders',
         component: <DemoPage name={'Заказы'}/>
     },
     {
-        path: '/reviews',
+        path: '/panel/reviews',
         component: <DemoPage name={'Отзывы'}/>
     },
     {
-        path: '/reports',
+        path: '/panel/reports',
         component: <DemoPage name={'Отчеты'}/>
     },
     {
-        path: '/history',
+        path: '/panel/history',
         component: <DemoPage name={'История последних действий'}/>
     },
     {
-        path: '/settings',
+        path: '/panel/settings',
         component: <DemoPage name={'Настройки'}/>
     },
 
@@ -66,41 +68,40 @@ const routes = [
 const MainFrame = () => {
 
 
-    const [ notes, setNotes ] = useState(null)
+    const [ notes, setNotes ] = useState([
+        {
+            id: 1,
+            content: 'Tralala'
+        },
+        {
+            id: 2,
+            content: 'Use effect'
+        },
+        {
+            id: 3,
+            content: 'Hahaha'
+        }
+    ])
 
-    useEffect(() => {
 
-    fetch('http://localhost:3001/api/notes')
-        .then((res) => {
-            return res.json()
-        })
-        .then((notes) => {
-            setNotes(notes)
-        });
-    })
 
 
     return (
         <MainFrameStyled>
-
-            <Router>
-                <SideNav/>
+            <SideNav/>
+            <Redirect to="/panel/dispatchers"/>
 
                 <div className="content">
 
-                    
                     {notes ? notes.map(note =>  <li key={note.id}>{note.content}</li>) : null}
 
                     <Switch>
-                        {routes.map((route, index) => 
-                            <Route key={index} exact path={route.path} render={() => route.component}/>
-                        )}                       
+                        {routes.map((route, index) => <Route key={index} exact path={route.path} render={() => route.component} />)}  
 
-                        <Route path="*" render={() => <h2>404 - Page not found!</h2>}/>
+                        <Route render={() => <h2>404 - Page not found!</h2>}/>
                     </Switch>
                 </div>
 
-            </Router>
         </MainFrameStyled>
     )
 }
