@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import SideNav from '../SideNav/SideNav'
 
+import WelcomeToPanel from '../../components/WelcomeToPanel/WelcomeToPanel'
 import Dispatchers from '../../pages/dispatchers/Dispatchers'
 
-
+import TopPanel from '../../components/TopPanel/TopPanel'
 
 const MainFrameStyled = styled.div`
     height: 100vh;
@@ -13,11 +14,18 @@ const MainFrameStyled = styled.div`
     overflow: hidden;
     display: grid;
     grid-template-areas:
-    "nav content";
+    "nav toppanel toppanel"
+    "nav content content"
+    "nav content content";
+    grid-template-rows: 60px 1fr;
     grid-template-columns: 250px 1fr;
     grid-gap: 0px;
+
     .content {
-        grid-area: 'content';
+        grid-area: content;
+        padding: 20px;
+        overflow: scroll;
+        background-color: #e7e7e7;
     }
 `
 
@@ -68,34 +76,15 @@ const routes = [
 const MainFrame = () => {
 
 
-    const [ notes, setNotes ] = useState([
-        {
-            id: 1,
-            content: 'Tralala'
-        },
-        {
-            id: 2,
-            content: 'Use effect'
-        },
-        {
-            id: 3,
-            content: 'Hahaha'
-        }
-    ])
-
-
-
-
     return (
         <MainFrameStyled>
             <SideNav/>
-            <Redirect to="/panel/dispatchers"/>
+            <TopPanel/>
 
                 <div className="content">
 
-                    {notes ? notes.map(note =>  <li key={note.id}>{note.content}</li>) : null}
-
                     <Switch>
+                        <Route exact path="/panel" component={WelcomeToPanel}/>
                         {routes.map((route, index) => <Route key={index} exact path={route.path} render={() => route.component} />)}  
 
                         <Route render={() => <h2>404 - Page not found!</h2>}/>

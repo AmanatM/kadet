@@ -27,6 +27,7 @@ const SideNavSection = styled.nav`
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    grid-area: nav;
 
     ul {
         li {
@@ -77,6 +78,7 @@ const Logout = styled.div`
     padding-bottom: 10px;
     display: flex;
     padding-left: 10px;
+    
 
 
     button {
@@ -89,6 +91,7 @@ const Logout = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+
 
         img {
             width: 40px;
