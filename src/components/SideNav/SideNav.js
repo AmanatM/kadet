@@ -28,6 +28,7 @@ const SideNavSection = styled.nav`
     flex-direction: column;
     overflow-y: scroll;
     grid-area: nav;
+    z-index: 2;
 
     ul {
         li {
