@@ -20,7 +20,7 @@ const WelcomeToPanel = () => {
         <WelcomeToPanelStyled>
             <div className="welcome">
                 <Card>
-                    Добро пожаловть в панель <b>Kadet!</b>
+                    Добро пожаловать в панель <b>Kadet!</b>
                 </Card>
             </div>
         </WelcomeToPanelStyled>
