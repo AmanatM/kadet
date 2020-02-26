@@ -42,7 +42,7 @@ const routes = [
         component: <DemoPage name={'Дилерские центры'}/>,
     },
     {
-        path: '/panel/maps',
+        path: '/panel/cards',
         component: <DemoPage name={'Карты'}/>
     },
     {

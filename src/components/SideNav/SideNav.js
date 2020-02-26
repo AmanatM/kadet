@@ -6,7 +6,7 @@ import logoIcon from '../../assets/imgs/logo.svg'
 
 import dipatchers from './icons/dispatchers.svg'
 import dealer_centers from './icons/dealer_centers.svg'
-import maps from './icons/maps.svg'
+import cards from './icons/cards.svg'
 import contractors from './icons/contractors.svg'
 import orders from './icons/orders.svg'
 import reviews from './icons/reviews.svg'
@@ -117,7 +117,7 @@ const SideNav = () => {
             <ul>
                 <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/>Диспетчеры</NavLink></li>
                 <li><NavLink to='/panel/dealer_centers'><img alt='Диспетчерские центры' src={dealer_centers}/>Диспетчерские центры</NavLink></li>
-                <li><NavLink to='/panel/maps'><img alt='Карты' src={maps}/>Карты</NavLink></li>
+                <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/>Карты</NavLink></li>
                 <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/>Подрятчики</NavLink></li>
                 <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/>Заказы</NavLink></li>
                 <li><NavLink to='/panel/reviews'><img alt='Отзывы' src={reviews}/>Отзывы</NavLink></li>
