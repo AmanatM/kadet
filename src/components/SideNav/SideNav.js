@@ -97,6 +97,8 @@ const Logout = styled.div`
         img {
             width: 40px;
             margin-right: 10px;
+            min-width: 40px;
+            
         }
     }
 `

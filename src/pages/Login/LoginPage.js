@@ -10,6 +10,8 @@ import waves from './waves.svg'
 import waves2 from './waves2.svg'
 import Button from '../../elements/Button'
 
+import { loginUser } from '../../services/userService'
+
 const LoginPageStyled = styled.div`
     display: flex;
     min-height: 100vh;
@@ -121,8 +123,17 @@ const LoginPage = () => {
     
     const login = (e) => {
         e.preventDefault()
+        
+        loginUser(user)
+        .then((res) => {
+            Auth.authenticate(() => history.push("/panel"))
+            console.log(res)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
 
-        Auth.authenticate(() => history.push("/panel"))
+      
     }
 
     return (
