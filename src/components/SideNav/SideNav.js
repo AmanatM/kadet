@@ -69,7 +69,7 @@ const Logo = styled.div`
     padding: 10px;
     background-color: #1e2d3a;
     img {
-        width: 70px;
+        width: 50px;
     }
 `
 
