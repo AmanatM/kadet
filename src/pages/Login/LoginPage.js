@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'
 import  { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { login, logout } from '../../reducers/user'
 
 import loginPageBg from './loginBg.jpg'
-import Auth from '../../utils/Auth'
 import kadetLogo from '../../assets/imgs/logo_white.svg'
 import waves from './waves.svg'
 import waves2 from './waves2.svg'
-import Button from '../../elements/Button'
 
-import { loginUser } from '../../services/userService'
+import Button from '../../elements/Button'
 
 const LoginPageStyled = styled.div`
     display: flex;
@@ -103,34 +103,35 @@ const Input = styled.input`
 
 `
 
-const LoginPage = () => {
+const LoginPage = (props) => {
 
     let history = useHistory()
 
     const [ loaded, setLoaded ] = useState(false)
-    console.log(loaded)
+    const [ loading, setLoading ] = useState(false)
 
     useEffect(() => {
         setTimeout(() => {
             setLoaded(true)
         }, 100)
+        props.logout()
     }, [])
 
     const [ user, setUser ] = useState({
         username: '',
         password: ''
     })
-    
     const login = (e) => {
         e.preventDefault()
-        
-        loginUser(user)
+        setLoading(true)
+        props.login(user)
         .then((res) => {
-            Auth.authenticate(() => history.push("/panel"))
-            console.log(res)
+            history.push("/panel")
         })
         .catch((err) => {
             console.log(err)
+            setLoading(false)
+
         })
 
       
@@ -146,15 +147,22 @@ const LoginPage = () => {
                 </div>
 
                 <form onSubmit={login}>
-                    <Input onChange={(e) => setUser({...user, username: e.target.value})} value={user.username} required type="text" placeholder="Логин"/>
-                    <Input onChange={(e) => setUser({...user, password: e.target.value})}  value={user.password} required  type="password" placeholder="Пароль"/>
+                    <Input aria-label="Логин" autoComplete="true" onChange={(e) => setUser({...user, username: e.target.value})} value={user.username} required type="text" placeholder="Логин"/>
+                    <Input aria-label="Пароль" autoComplete="current-password" onChange={(e) => setUser({...user, password: e.target.value})}  value={user.password} required  type="password" placeholder="Пароль"/>
                     <Link className="forgot_password" to="/forgot_password">Забыли пароль?</Link>
-                    <Button color="black" bgColor="white" >Войти</Button>
+                    <Button disabled={loading ? true : false} color="black" bgColor="white" >Войти</Button>
                 </form>
-
             </div>
         </LoginPageStyled>
     )
 }
 
-export default LoginPage
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, {login, logout})(LoginPage)
+
+

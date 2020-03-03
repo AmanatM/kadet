@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { NavLink, Link, useHistory } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { logout } from '../../reducers/user'
 
 import logoIcon from '../../assets/imgs/logo.svg'
-
 import dipatchers from './icons/dispatchers.svg'
 import dealer_centers from './icons/dealer_centers.svg'
 import cards from './icons/cards.svg'
@@ -14,9 +15,6 @@ import reports from './icons/reports.svg'
 import historyIcon from './icons/history.svg'
 import settings from './icons/settings.svg'
 import logoutIcon from './icons/logout.svg'
-
-import Auth from '../../utils/Auth'
-
 
 
 const SideNavSection = styled.nav`
@@ -105,12 +103,14 @@ const Logout = styled.div`
 
 
 
-const SideNav = () => {
+const SideNav = (props) => {
+
 
     let history = useHistory()
     
     const logOut = () => {
-        Auth.signout(() => history.push("/login"));
+        props.logout()
+        history.push("/login")
     }
 
 
@@ -138,4 +138,4 @@ const SideNav = () => {
     )
 }
 
-export default SideNav
+export default connect(null, {logout})(SideNav)

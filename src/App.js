@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import GlobalStyles from './GlobalStyles' 
 import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { initUser } from './reducers/user'
 
 import MainFrame from './components/MainFrame/MainFrame'
 import LoginPage from './pages/Login/LoginPage'
 
 import PrivateRoute from './components/PrivateRoute'
-import Auth from './utils/Auth'
 
 
-const MainPage = () => {
 
+const MainPage = (user) => {
   return (
     <div>
-      {Auth.loggedIn ? <Redirect to="/panel"/> : <Redirect to="/login"/>}
+      {user ? <Redirect to="/panel"/> : <Redirect to="/login"/>}
     </div>
   )
 }
 
+const App = (props) => {
 
-const App = () => {
+  useEffect(() => {
+    props.initUser()
+  }, [])
+  
 
   return (
     <div className="App">
@@ -29,8 +34,8 @@ const App = () => {
         
         <Switch>
 
-          <Route exact path="/" component={MainPage}/>
-          <PrivateRoute path="/panel/" component={MainFrame}/>
+          <Route exact path="/" component={() => <MainPage user={props.user}/>}/>
+          <PrivateRoute user={props.user} path="/panel/" component={MainFrame}/>
           <Route exact path="/login" component={LoginPage}/>
           <Route render={() => <h2>404 - Page not found!  <Link to="/panel">Go to panel:</Link></h2>}/>
           
@@ -43,4 +48,10 @@ const App = () => {
   )
 }
 
-export default App
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps, {initUser})(App)

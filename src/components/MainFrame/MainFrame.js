@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import SideNav from '../SideNav/SideNav'
+import { connect } from 'react-redux'
 
 import WelcomeToPanel from '../../components/WelcomeToPanel/WelcomeToPanel'
 import Dispatchers from '../../pages/dispatchers/Dispatchers'
@@ -73,8 +74,7 @@ const routes = [
 ]
 
 
-const MainFrame = () => {
-
+const MainFrame = (props) => {
 
     return (
         <MainFrameStyled>
@@ -95,4 +95,10 @@ const MainFrame = () => {
     )
 }
 
-export default MainFrame
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, null)(MainFrame)

@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
+
 import userAvatar from './userAvatar.jpg'
+
 
 const TopPanelStyled = styled.div`
     grid-area: toppanel;
@@ -29,17 +32,24 @@ const User = styled.div`
     }
 `
 
-const TopPanel = () => {
+const TopPanel = (props) => {
 
     return (
         <TopPanelStyled>
             <h3>Панель</h3>
             <User>
-                <b>Фамилия Имя</b>
+                <b>{props.user ? props.user.username : null}</b>
                 <img alt="Аватар пользователя" src={userAvatar}/>
             </User>
         </TopPanelStyled>
     )
 }
 
-export default TopPanel
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
+
+
+export default connect(mapStateToProps, null)(TopPanel)

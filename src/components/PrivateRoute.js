@@ -3,19 +3,21 @@
 
 // If they are: they proceed to the page
 // If not: they are redirected to the login page.
-import React from 'react'
-import Auth from '../utils/Auth'
+import React, { useEffect } from 'react'
 import { Redirect, Route } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { logout } from '../reducers/user'
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ logout, user, component: Component, ...rest }) => {
 
   // Add your own authentication on the below line.
+  let authenticated = JSON.parse(localStorage.getItem('user'))
+
 
   return (
-    <Route
-      {...rest}
+    <Route {...rest}
       render={props =>
-        Auth.loggedIn ? (
+        authenticated ? (
           <Component {...props} />
         ) : (
           <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
@@ -25,4 +27,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   )
 }
 
-export default PrivateRoute
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps, {logout})(PrivateRoute)
