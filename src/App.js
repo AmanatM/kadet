@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import GlobalStyles from './GlobalStyles' 
 import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -6,6 +6,7 @@ import { initUser } from './reducers/user'
 
 import MainFrame from './components/MainFrame/MainFrame'
 import LoginPage from './pages/Login/LoginPage'
+import Notifications from './components/Notifications/Notifications'
 
 import PrivateRoute from './components/PrivateRoute'
 
@@ -27,8 +28,10 @@ const App = (props) => {
   
 
   return (
-    <div className="App">
+    <div styled={{position: 'relative'}} className="App">
       <GlobalStyles/>
+
+      <Notifications notifications={props.notifications}/>
 
       <Router>
         
@@ -50,7 +53,8 @@ const App = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    notifications: state.notifications
   }
 }
 

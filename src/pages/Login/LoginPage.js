@@ -4,6 +4,9 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login, logout } from '../../reducers/user'
+import { notify, clearNotifications } from '../../reducers/notifications'
+
+import Loader from 'react-loader-spinner'
 
 import loginPageBg from './loginBg.jpg'
 import kadetLogo from '../../assets/imgs/logo_white.svg'
@@ -117,6 +120,18 @@ const LoginPage = (props) => {
         props.logout()
     }, [])
 
+    useEffect(() => {
+        props.clearNotifications()
+        props.notify({
+            heading: 'Какой-то текст',
+            type: 'info',
+            time: 4000
+        });
+        return () => {
+            props.clearNotifications()
+        }
+    }, [])
+
     const [ user, setUser ] = useState({
         username: '',
         password: ''
@@ -129,8 +144,15 @@ const LoginPage = (props) => {
             history.push("/panel")
         })
         .catch((err) => {
-            console.log(err)
+            console.error(err)
             setLoading(false)
+
+            //props.clearNotifications()
+            props.notify({
+                heading: 'Ошибка авторизации',
+                time: 4000,
+                type: 'error'
+            });
 
         })
 
@@ -150,7 +172,7 @@ const LoginPage = (props) => {
                     <Input aria-label="Логин" autoComplete="true" onChange={(e) => setUser({...user, username: e.target.value})} value={user.username} required type="text" placeholder="Логин"/>
                     <Input aria-label="Пароль" autoComplete="current-password" onChange={(e) => setUser({...user, password: e.target.value})}  value={user.password} required  type="password" placeholder="Пароль"/>
                     <Link className="forgot_password" to="/forgot_password">Забыли пароль?</Link>
-                    <Button disabled={loading ? true : false} color="black" bgColor="white" >Войти</Button>
+                    <Button style={{height: '40px'}} disabled={loading ? true : false} color="black" bgColor="white" >{loading ? <Loader type="Puff" color="#000" height={18} width={18}/> : "Войти"}</Button>
                 </form>
             </div>
         </LoginPageStyled>
@@ -163,6 +185,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {login, logout})(LoginPage)
+export default connect(mapStateToProps, {login, logout, notify, clearNotifications})(LoginPage)
 
 
