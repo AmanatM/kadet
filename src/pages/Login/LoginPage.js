@@ -147,10 +147,10 @@ const LoginPage = (props) => {
             console.error(err)
             setLoading(false)
 
-            //props.clearNotifications()
+            props.clearNotifications()
             props.notify({
                 heading: 'Ошибка авторизации',
-                time: 4000,
+                time: 2000,
                 type: 'error'
             });
 

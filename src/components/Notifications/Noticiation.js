@@ -71,20 +71,24 @@ const Notification = ({notification, closeNotification}) => {
 
     useEffect(() => {
 
-        const timer = setTimeout(() => {
-            setWidth(0)
-        }, 1000)
-
-        const closeTimer = setTimeout(() => {
-            closeNotification(notification.id)
-        }, 1000 + notification.time)
-        
-        console.log(timer)
-
-        return () => {
-            clearTimeout(timer)        
-            clearTimeout(closeTimer)
+        if(notification.time) {
+            
+            const timer = setTimeout(() => {
+                setWidth(0)
+            }, 1000)
+    
+            const closeTimer = setTimeout(() => {
+                closeNotification(notification.id)
+            }, 1000 + notification.time)
+            
+            console.log(timer)
+    
+            return () => {
+                clearTimeout(timer)        
+                clearTimeout(closeTimer)
+            }
         }
+
     }, [])
 
 
@@ -93,7 +97,7 @@ const Notification = ({notification, closeNotification}) => {
             <button onClick={() => closeNotification(notification.id)} className="close_btn">Close</button>
             <h3>{notification.heading}</h3>
             {notification.text ? <p>{notification.text}</p> : null}
-            <div className="progressBar" style={{width: `${width}%`, transition: `all ${notification.time/1000}s linear`}}></div>
+            {notification.time ? <div className="progressBar" style={{width: `${width}%`, transition: `all ${notification.time/1000}s linear`}}></div> : null}
         </NotificationStyled>
     )
 }
