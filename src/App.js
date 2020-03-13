@@ -28,7 +28,7 @@ const App = (props) => {
   
 
   return (
-    <div styled={{position: 'relative'}} className="App">
+    <div style={{position: 'relative'}} className="App">
       <GlobalStyles/>
 
       <Notifications notifications={props.notifications}/>

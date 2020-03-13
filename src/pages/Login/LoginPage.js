@@ -120,12 +120,15 @@ const LoginPage = (props) => {
         props.logout()
     }, [])
 
+
+
     useEffect(() => {
         props.clearNotifications()
         props.notify({
-            heading: 'Какой-то текст',
-            type: 'info',
-            time: 4000
+            heading: 'Заполнить данные?',
+            type: 'submit',
+            text: '(Только во время разработки)',
+            onOkFunc: fillData
         });
         return () => {
             props.clearNotifications()
@@ -136,6 +139,13 @@ const LoginPage = (props) => {
         username: '',
         password: ''
     })
+
+    function fillData() {
+        setUser({
+            username: 'admin',
+            password: 'admin'
+        })
+    }
     const login = (e) => {
         e.preventDefault()
         setLoading(true)
@@ -150,7 +160,6 @@ const LoginPage = (props) => {
             props.clearNotifications()
             props.notify({
                 heading: 'Ошибка авторизации',
-                time: 2000,
                 type: 'error'
             });
 

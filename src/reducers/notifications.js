@@ -16,6 +16,13 @@
 //         type: 'success',
 //         time: 1000
 //     },
+
+//     {
+//         heading: 'Success',
+//         type: 'submit',
+//         onOkFunc: func,
+//         time: 1000
+//     },
 // ]
 
 const reducer = (state = [], action) => {

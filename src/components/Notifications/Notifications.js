@@ -5,7 +5,7 @@ import Notification from './Noticiation'
 
 const NotificationsStyled = styled.div`
     z-index: 999;
-    position: absolute;
+    position: fixed;
     right: 5%;
     bottom: 5%;
     max-width: 90vw;
@@ -14,7 +14,7 @@ const NotificationsStyled = styled.div`
 `
 const Notifications = ({notifications}) => {
 
-    // types: error, info, success
+    // types: error, info, success, submit
     return (
         <NotificationsStyled>
             {notifications.map((item, index) => (
