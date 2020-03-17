@@ -145,6 +145,13 @@ const LoginPage = (props) => {
             username: 'admin',
             password: 'admin'
         })
+
+        props.notify({
+            heading: 'Данные заполненны',
+            type: 'success',
+            text: '(Только во время разработки)',
+            time: 2000
+        });
     }
     const login = (e) => {
         e.preventDefault()
@@ -160,7 +167,8 @@ const LoginPage = (props) => {
             props.clearNotifications()
             props.notify({
                 heading: 'Ошибка авторизации',
-                type: 'error'
+                type: 'error',
+                time: 2000
             });
 
         })

@@ -1,7 +1,11 @@
 import axios from 'axios'
-const baseUrl = '/api/dispatchers'
+import { authHeader } from './misc/authHeader'
 
+const baseUrl = '/api/dispatchers'
+ 
 export const getAllDispatchers = async () => {
-    const res = await axios.get(baseUrl)
+    
+    const res = await axios.get(baseUrl, {headers: authHeader()})
+
     return res.data
 }

@@ -57,7 +57,7 @@ const NotificationStyled = styled.div`
 
         &.submit {
             background-color: #607d8b;
-            padding-right: 100px;
+            padding-right: 120px;
 
             .content {
                 margin: auto;
@@ -65,7 +65,7 @@ const NotificationStyled = styled.div`
         }
 
         &.success {
-            background-color: #8bc34a;
+            background-color: #4caf50;
         }
 
         .progressBar {
