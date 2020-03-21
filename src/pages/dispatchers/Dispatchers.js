@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { getDispatchers } from '../../reducers/dispatchers'
 import StatusSelect from './StatusSelect'
+import { getAllDispatchers } from "../../services/dispatcherService"
+import Loader from './Loader'
 
 import Card from '../../elements/Card'
 
@@ -61,6 +63,7 @@ const statusOptions = [
     { value: 'day_off', label: 'Выходной'},
     { value: 'active', label: 'Активный'},
     { value: 'vocation', label: 'В отпуске'},
+    { value: 'sick_leave', label: 'На больничном'},
 ]
 
 const Dispatchers = (props) => {
@@ -68,44 +71,57 @@ const Dispatchers = (props) => {
     useEffect(() => {
         props.getDispatchers()
 
+        getAllDispatchers()
+        .then(res => {
+            setDispathcers(res)
+        })
     }, [])
 
-    return (
-        <DispatchersStyled>
-            <Card>
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Логин</th>
-                            <th>ФИО</th>
-                            <th>Должность</th>
-                            <th className="center">Статус</th>
-                            <th className="center">Номер SIP телефона</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {props.dispatchers ? props.dispatchers.map(dispatcher => (
-                            <tr className="row_data" key={dispatcher.id}>
-                                <td><input type="checkbox" /></td>
-                                <td>{dispatcher.username}</td>
-                                <td>{dispatcher.surname} {dispatcher.name}</td>
-                                <td>{dispatcher.position}</td>
-                                <td className="status">
-                                    <StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}>
- 
-                                    </StatusSelect>
-                                </td>
-                                <td className="center">{dispatcher.SIPNumber}</td>
+    const [ dispatchers, setDispathcers ] = React.useState(null)
 
+    if(dispatchers) {
+
+        return (
+            <DispatchersStyled >
+                <Card style={{height: '100% !important'}}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Логин</th>
+                                <th>ФИО</th>
+                                <th>Должность</th>
+                                <th className="center">Статус</th>
+                                <th className="center">Номер SIP телефона</th>
                             </tr>
-                        )) : null}
-                    </tbody>
-                </table>
-            </Card>
-
-        </DispatchersStyled>
-    )
+                        </thead>
+                        <tbody>
+                            {dispatchers ? dispatchers.map(dispatcher => (
+                                <tr className="row_data" key={dispatcher.id}>
+                                    <td><input type="checkbox" /></td>
+                                    <td>{dispatcher.username}</td>
+                                    <td>{dispatcher.surname} {dispatcher.name}</td>
+                                    <td>{dispatcher.position}</td>
+                                    <td className="status">
+                                        <StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}>
+     
+                                        </StatusSelect>
+                                    </td>
+                                    <td className="center">{dispatcher.SIPNumber}</td>
+    
+                                </tr>
+                            )) : null}
+                        </tbody>
+                    </table>
+                </Card>
+    
+            </DispatchersStyled>
+        )
+    } else {
+        return (
+            <Card style={{height: '100%'}}><Loader/></Card>
+        )
+    }
 }
 
 const mapStateToProps = (state) => {

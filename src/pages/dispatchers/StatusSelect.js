@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { patchDispatcher } from '../../services/dispatcherService'
+import { notify } from '../../reducers/notifications'
+import { connect } from 'react-redux'
 
 const SelectStyled = styled.ul`
     position: absolute;
@@ -45,6 +47,7 @@ const Selected = styled.div`
     text-align: center;
     font-weight: bold;
     color: white;
+    margin: 0 auto;
 
     &.fired {
         background-color: #f44336;
@@ -77,28 +80,40 @@ const StatusSelect = (props) => {
         const data = [{
             propName: 'status', value: selection
         }]
+        setSelected(selection)
+
         patchDispatcher(id, data)
         .then((res) => {
             setSelected(selection)
+            props.notify({
+                heading: 'Статус обновлен',
+                time: 1500,
+                type: 'success'
+            })
         })
         .catch(err => {
-            console.error(err)
+            setSelected(props.selected)
+            props.notify({
+                heading: 'Ошибка',
+                text: err,
+                time: 3000,
+                type: 'error'
+            })
         })
     }
 
     const valueToShow = props.options.filter(option => option.value === selected)
-    console.log(valueToShow)
 
     return (
-        <div>
+        <>
             <Selected className={selected} onClick={openDropDown}>{valueToShow.map(value => value.label)}</Selected>
             {active ? (
                 <SelectStyled onMouseLeave={() => setActive(false)} onClick={openDropDown}>
                     {props.options.map((option, i) => (<li onClick={() => select(props.id, option.value)} key={i} data-value={option.value}>{option.label}</li>))}
                 </SelectStyled>
             ) : null}
-        </div>
+        </>
     )
 }
 
-export default StatusSelect
+export default connect(null, { notify })(StatusSelect)
