@@ -119,7 +119,7 @@ const SideNav = (props) => {
             <Link to="/"><Logo><img alt="Логотип" src={logoIcon}/></Logo></Link>
             <ul>
                 <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/>Диспетчеры</NavLink></li>
-                <li><NavLink to='/panel/dealer_centers'><img alt='Диспетчерские центры' src={dealer_centers}/>Диспетчерские центры</NavLink></li>
+                <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/> Дилерские центры</NavLink></li>
                 <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/>Карты</NavLink></li>
                 <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/>Подрятчики</NavLink></li>
                 <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/>Заказы</NavLink></li>
