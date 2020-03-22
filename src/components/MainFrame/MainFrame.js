@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import SideNav from '../SideNav/SideNav'
 import { connect } from 'react-redux'
+
 
 import WelcomeToPanel from '../../components/WelcomeToPanel/WelcomeToPanel'
 import Dispatchers from '../../pages/dispatchers/Dispatchers'
@@ -30,13 +31,14 @@ const MainFrameStyled = styled.div`
     }
 `
 
+
 const DemoPage = ({name}) => <h1>{name}</h1>
 
 
 const routes = [
     {
         path: '/panel/dispatchers',
-        component: <Dispatchers/>
+        component: <Dispatchers />
     },
     {
         path: '/panel/dealer_centers',

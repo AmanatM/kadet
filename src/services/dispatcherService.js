@@ -3,8 +3,8 @@ import { authHeader } from './misc/authHeader'
 
 const baseUrl = '/api/dispatchers'
  
-export const getAllDispatchers = async () => {
-    const res = await axios.get(baseUrl, {headers: authHeader()})
+export const getAllDispatchers = async (page = 1, limit = 10) => {
+    const res = await axios.get(`${baseUrl}?page=${page}&limit=${limit}`, {headers: authHeader()})
     return res.data
 }
 

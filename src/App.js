@@ -11,7 +11,6 @@ import Notifications from './components/Notifications/Notifications'
 import PrivateRoute from './components/PrivateRoute'
 
 
-
 const MainPage = (user) => {
   return (
     <div>
@@ -21,6 +20,7 @@ const MainPage = (user) => {
 }
 
 const App = (props) => {
+
 
   useEffect(() => {
     props.initUser()

@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { getDispatchers } from '../../reducers/dispatchers'
 import StatusSelect from './StatusSelect'
 import { getAllDispatchers } from "../../services/dispatcherService"
 import Loader from './Loader'
+import { useLocation } from 'react-router-dom'
+import Paginator from './Paginator'
+
+import * as QueryString from "query-string"
 
 import Card from '../../elements/Card'
 
@@ -16,6 +19,9 @@ const DispatchersStyled = styled.div`
 
         border-collapse: collapse;
         width: 100%;
+        height: 100%;
+        overflow: scroll;
+
 
         .center {
             text-align: center;
@@ -67,15 +73,20 @@ const statusOptions = [
 ]
 
 const Dispatchers = (props) => {
+    
+    let location = useLocation();
+    const params = QueryString.parse(location.search);
 
     useEffect(() => {
-        props.getDispatchers()
 
-        getAllDispatchers()
+        getAllDispatchers(params.page, params.limit)
         .then(res => {
-            setDispathcers(res)
+            setDispathcers(res.docs)
+            console.log(res)
         })
     }, [])
+    console.log(params)
+
 
     const [ dispatchers, setDispathcers ] = React.useState(null)
 
@@ -83,7 +94,7 @@ const Dispatchers = (props) => {
 
         return (
             <DispatchersStyled >
-                <Card style={{height: '100% !important'}}>
+                <Card style={{height: '80vh', overflow: 'scroll'}}>
                     <table>
                         <thead>
                             <tr>
@@ -114,20 +125,16 @@ const Dispatchers = (props) => {
                         </tbody>
                     </table>
                 </Card>
-    
+                <Paginator/>               
             </DispatchersStyled>
         )
     } else {
         return (
-            <Card style={{height: '100%'}}><Loader/></Card>
+            <Card style={{height: '80vh'}}><Loader/></Card>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        dispatchers: state.dispatchers
-    }
-}
 
-export default connect(mapStateToProps, { getDispatchers })(Dispatchers)
+
+export default Dispatchers
