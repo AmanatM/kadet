@@ -10,7 +10,7 @@ const SelectStyled = styled.ul`
     box-shadow: 0px 0px 4px 0px rgba(0,0,0,.4);
     border-radius: 10px;
     cursor: pointer;
-    top: 0;
+    top: -70px;
     left: 0;
     z-index: 99;
     width: 100%;

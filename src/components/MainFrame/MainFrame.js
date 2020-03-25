@@ -37,10 +37,6 @@ const DemoPage = ({name}) => <h1>{name}</h1>
 
 const routes = [
     {
-        path: '/panel/dispatchers',
-        component: <Dispatchers />
-    },
-    {
         path: '/panel/dealer_centers',
         component: <DemoPage name={'Дилерские центры'}/>,
     },
@@ -87,6 +83,7 @@ const MainFrame = (props) => {
 
                     <Switch>
                         <Route exact path="/panel" component={WelcomeToPanel}/>
+                        <Route path="/panel/dispatchers" component={Dispatchers}/>
                         {routes.map((route, index) => <Route key={index} exact path={route.path} render={() => route.component} />)}  
 
                         <Route render={() => <h2>404 - Page not found!</h2>}/>

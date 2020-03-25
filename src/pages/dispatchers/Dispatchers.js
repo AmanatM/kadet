@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { Link, Route, BrowserRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import StatusSelect from './StatusSelect'
 import { getAllDispatchers } from "../../services/dispatcherService"
 import Loader from './Loader'
 import { useLocation } from 'react-router-dom'
 import Paginator from './Paginator'
-
+import Dispatcher from '../Dispatcher/Dispatcher'
 import * as QueryString from "query-string"
 
 import Card from '../../elements/Card'
 
-import SkeletonPulse from '../../components/skeletonLoader/SkeletonPulse'
 
 const DispatchersStyled = styled.div`
 
@@ -19,7 +18,7 @@ const DispatchersStyled = styled.div`
 
         border-collapse: collapse;
         width: 100%;
-        height: 100%;
+
         overflow: scroll;
 
 
@@ -54,16 +53,6 @@ const DispatchersStyled = styled.div`
 `
 
 
-const SkeletonLine = styled(SkeletonPulse)`
-  width: 5.5em;
-  height: 20px !important;
-  border-radius: 5px;
-
-  &::before {
-    content: "\00a0";
-  }
-`;
-
 const statusOptions = [
     { value: 'fired', label: 'Уволен'},
     { value: 'day_off', label: 'Выходной'},
@@ -85,7 +74,6 @@ const Dispatchers = (props) => {
             console.log(res)
         })
     }, [])
-    console.log(params)
 
 
     const [ dispatchers, setDispathcers ] = React.useState(null)
@@ -94,6 +82,7 @@ const Dispatchers = (props) => {
 
         return (
             <DispatchersStyled >
+                
                 <Card style={{height: '80vh', overflow: 'scroll'}}>
                     <table>
                         <thead>
@@ -108,9 +97,9 @@ const Dispatchers = (props) => {
                         </thead>
                         <tbody>
                             {dispatchers ? dispatchers.map(dispatcher => (
-                                <tr className="row_data" key={dispatcher.id}>
+                               <tr className="row_data" key={dispatcher.id}>
                                     <td><input type="checkbox" /></td>
-                                    <td>{dispatcher.username}</td>
+                                    <td> <Link to={`/panel/dispatchers/${dispatcher.id}`}>{dispatcher.username}</Link></td>
                                     <td>{dispatcher.surname} {dispatcher.name}</td>
                                     <td>{dispatcher.position}</td>
                                     <td className="status">
@@ -125,7 +114,10 @@ const Dispatchers = (props) => {
                         </tbody>
                     </table>
                 </Card>
-                <Paginator/>               
+
+                <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
+
+                <Paginator/> 
             </DispatchersStyled>
         )
     } else {
