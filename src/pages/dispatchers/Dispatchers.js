@@ -66,65 +66,81 @@ const Dispatchers = (props) => {
     let location = useLocation();
     const params = QueryString.parse(location.search);
 
+    const [ totalPages, setTotalPages ] = React.useState(0)
+
+    const [ dispatchers, setDispathcers ] = React.useState(null)
+
     useEffect(() => {
 
         getAllDispatchers(params.page, params.limit)
         .then(res => {
             setDispathcers(res.docs)
-            console.log(res)
+            setTotalPages(+res.pages)
         })
     }, [])
-
-
-    const [ dispatchers, setDispathcers ] = React.useState(null)
-
-    if(dispatchers) {
-
-        return (
-            <DispatchersStyled >
-                
-                <Card style={{height: '80vh', overflow: 'scroll'}}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Логин</th>
-                                <th>ФИО</th>
-                                <th>Должность</th>
-                                <th className="center">Статус</th>
-                                <th className="center">Номер SIP телефона</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {dispatchers ? dispatchers.map(dispatcher => (
-                               <tr className="row_data" key={dispatcher.id}>
-                                    <td><input type="checkbox" /></td>
-                                    <td> <Link to={`/panel/dispatchers/${dispatcher.id}`}>{dispatcher.username}</Link></td>
-                                    <td>{dispatcher.surname} {dispatcher.name}</td>
-                                    <td>{dispatcher.position}</td>
-                                    <td className="status">
-                                        <StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}>
-     
-                                        </StatusSelect>
-                                    </td>
-                                    <td className="center">{dispatcher.SIPNumber}</td>
     
-                                </tr>
-                            )) : null}
-                        </tbody>
-                    </table>
-                </Card>
+    const [ page, setPage ] = React.useState(+params.page || 1)
 
-                <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
+    useEffect(() => {
+        setDispathcers(null)
 
-                <Paginator/> 
-            </DispatchersStyled>
-        )
-    } else {
-        return (
-            <Card style={{height: '80vh'}}><Loader/></Card>
-        )
-    }
+        getAllDispatchers(page, params.limit)
+        .then(res => {
+            console.log(res)
+            console.log('Page: ' + page)
+            setDispathcers(res.docs)
+            setTotalPages(+res.pages)
+        })
+    }, [page])
+
+
+
+
+
+    return (
+        <DispatchersStyled >
+            
+            <Card style={{height: '80vh', overflow: 'scroll'}}>
+                {dispatchers ? (
+                    <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Логин</th>
+                            <th>ФИО</th>
+                            <th>Должность</th>
+                            <th className="center">Статус</th>
+                            <th className="center">Номер SIP телефона</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {dispatchers ? dispatchers.map(dispatcher => (
+                            <tr className="row_data" key={dispatcher.id}>
+                                <td><input type="checkbox" /></td>
+                                <td> <Link to={`/panel/dispatchers/${dispatcher.id}`}>{dispatcher.username}</Link></td>
+                                <td>{dispatcher.surname} {dispatcher.name}</td>
+                                <td>{dispatcher.position}</td>
+                                <td className="status">
+                                    <StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}>
+    
+                                    </StatusSelect>
+                                </td>
+                                <td className="center">{dispatcher.SIPNumber}</td>
+
+                            </tr>
+                        )) : null}
+                    </tbody>
+                </table>
+                ) : <Loader/>}
+                
+            </Card>
+
+            <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
+
+            <Paginator pages={totalPages} loading={dispatchers} page={page} setPage={setPage}/> 
+        </DispatchersStyled>
+    )
 }
 
 
