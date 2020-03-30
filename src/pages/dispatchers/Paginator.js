@@ -44,10 +44,10 @@ const PaginatorStyled = styled(Card)`
     }
 `
 
-const Paginator = ({page, setPage, history, loading, pages}) => {
+const Paginator = ({page, setPage, history, loading, totalPages}) => {
 
     useEffect(() => {
-        if(page > pages || page < 0) {
+        if(page < 0) {
             setPage(1)
             history.push(`/panel/dispatchers?page=${1}`)
         }
@@ -61,7 +61,7 @@ const Paginator = ({page, setPage, history, loading, pages}) => {
     }
 
     const goForward = () => {
-        if(pages > page) {
+        if(totalPages > page) {
             setPage(page+1)
             history.push(`/panel/dispatchers?page=${page+1}`)
         }

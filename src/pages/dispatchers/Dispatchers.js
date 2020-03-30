@@ -74,8 +74,8 @@ const Dispatchers = (props) => {
 
         getAllDispatchers(params.page, params.limit)
         .then(res => {
-            setDispathcers(res.docs)
             setTotalPages(+res.pages)
+            setDispathcers(res.docs)
         })
     }, [])
     
@@ -88,8 +88,8 @@ const Dispatchers = (props) => {
         .then(res => {
             console.log(res)
             console.log('Page: ' + page)
-            setDispathcers(res.docs)
             setTotalPages(+res.pages)
+            setDispathcers(res.docs)
         })
     }, [page])
 
@@ -138,7 +138,7 @@ const Dispatchers = (props) => {
 
             <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
 
-            <Paginator pages={totalPages} loading={dispatchers} page={page} setPage={setPage}/> 
+            <Paginator totalPages={totalPages} loading={dispatchers} page={page} setPage={setPage}/> 
         </DispatchersStyled>
     )
 }

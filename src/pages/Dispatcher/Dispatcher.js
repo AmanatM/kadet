@@ -5,12 +5,17 @@ import { withRouter } from 'react-router-dom'
 import StatusSelect from '../dispatchers/StatusSelect'
 import { parseDate } from '../../utils/dateParser'
 import Loader from './Loader'
+import { connect } from 'react-redux'
+import { notify } from '../../reducers/notifications'
 
 import avatar_placeholder from './icons/avatar_placeholder.svg'
 import email_icon from './icons/email_icon.svg'
 import phone_icon from './icons/phone_icon.svg'
 import clock_icon from './icons/clock_icon.svg'
 import docs_icon from './icons/docs_icon.svg'
+import edit_icon from './icons/edit.svg'
+import close_icon from '../../assets/imgs/close_icon_black.svg'
+
 
 const DispatcherStyled = styled.div`
     position: absolute;
@@ -19,11 +24,33 @@ const DispatcherStyled = styled.div`
     height: 40px;
     left: 0;
     background: rgba(0, 0, 0, .5);
-    z-index: 999;
+    z-index: 99;
     padding: 20px;
     height: 100vh;
     width: 100%;
     display: flex;
+
+    input {
+        padding: 5px 8px;
+    }
+
+    .edit {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 30px;
+        cursor: pointer;
+    }
+
+    .save {
+        padding: 8px 10px;
+        border-radius: 10px;
+        background-color: #4caf50;
+        color: white;
+        font-weight: bold;
+        font-size: .95em;
+        margin-top: 10px;
+    }
 
     .content {
         background-color: red;
@@ -128,9 +155,31 @@ const Dispatcher = (props) => {
         { value: 'sick_leave', label: 'На больничном'},
     ]
 
+    const [ editMode, setEditMode ] = React.useState(false)
+
     const closeUserInfo = (e) => {
         e.stopPropagation()
         return props.history.push('/panel/dispatchers/')
+    }
+
+    const [ dispatcherNew, setDispatcherNew ] = React.useState(null)
+    console.log(dispatcherNew)
+
+    const edit = () => {
+        setEditMode(true)
+        setDispatcherNew(dispatcher)
+    }
+
+    const save = () => {
+        props.notify( {
+            heading: 'Данные обновлены',
+            type: 'success',
+            time: 1500
+        })
+        
+        setEditMode(false)
+        setDispatcher(dispatcherNew)
+
     }
 
     return (
@@ -138,11 +187,20 @@ const Dispatcher = (props) => {
             <div className="content" onClick={(e) => e.stopPropagation()}>
                 {dispatcher ? (
                     <div>
-
+                     { !editMode ? (<img onClick={edit} className="edit" src={edit_icon}/>) : (<img onClick={() => props.notify({
+                         heading: 'Отменить изменения?',
+                         text: 'Проделанные изменения будут сброшены',
+                         type: 'submit',
+                         onOkFunc: () => setEditMode(false)
+                     })} className="edit" src={close_icon}/>) }
                         <div className="top">
                             <div className="avatar"><img src={avatar_placeholder}/></div>
                             <div className="right">
-                                <h3>{dispatcher.name} {dispatcher.surname}</h3>
+                                {!editMode ? (<h3>{dispatcher.name} {dispatcher.surname}</h3>) : 
+                                    (<><input placeholder="Имя" onChange={(e) => setDispatcherNew({...dispatcherNew, name: e.target.value})} value={dispatcherNew.name}/>
+                                     <input placeholder="Фамилия" onChange={(e) => setDispatcherNew({...dispatcherNew, surname: e.target.value})} value={dispatcherNew.surname}/>
+                                    </> )
+                                }
                                 <p className="username">Имя пользователя: <i><b>{dispatcher.username}</b></i></p>
                                 <p className="position">Позиция: <b>{dispatcher.position}</b></p>
                                 <div className="select"><StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}/></div>
@@ -152,10 +210,10 @@ const Dispatcher = (props) => {
                         <div className="bottom">
                             <div className="left">
                                 <div className="item">
-                                    <img src={email_icon}/><span>{dispatcher.email}</span>
+                                <img src={email_icon}/>{!editMode ? (<><span>{dispatcher.email}</span></>) : (<input onChange={(e) => setDispatcherNew({...dispatcherNew, email: e.target.value})} value={dispatcherNew.email}/>)}
                                 </div>
                                 <div className="item">
-                                    <img src={phone_icon}/><span>{dispatcher.SIPNumber}</span>
+                                    <img src={phone_icon}/>{!editMode ? (<><span>{dispatcher.SIPNumber}</span></>) : (<input onChange={(e) => setDispatcherNew({...dispatcherNew, SIPNumber: e.target.value})} value={dispatcherNew.SIPNumber}/>)}
                                 </div>
                             </div>
                             <div className="right">
@@ -167,6 +225,7 @@ const Dispatcher = (props) => {
                                 </div>
                             </div>
                         </div>
+                        {editMode ? (<button onClick={save} className="save">Сохранить</button>) : null}
                     </div>
                 ): <Loader/>}
             </div>
@@ -174,4 +233,4 @@ const Dispatcher = (props) => {
     )
 }
 
-export default withRouter(Dispatcher)
+export default connect(null, { notify })(withRouter(Dispatcher))

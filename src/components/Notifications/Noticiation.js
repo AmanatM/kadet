@@ -45,6 +45,7 @@ const NotificationStyled = styled.div`
         p {
             font-size: .9em;
             margin-top: 1em;
+            text-align: center;
         }
 
         &.error {
