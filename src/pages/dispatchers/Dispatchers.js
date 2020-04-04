@@ -9,6 +9,9 @@ import Paginator from './Paginator'
 import Dispatcher from '../Dispatcher/Dispatcher'
 import * as QueryString from "query-string"
 
+import { useQueryState } from "react-router-use-location-state";
+
+
 import Card from '../../elements/Card'
 
 
@@ -67,6 +70,7 @@ const Dispatchers = (props) => {
     const params = QueryString.parse(location.search);
 
     const [ totalPages, setTotalPages ] = React.useState(0)
+    
 
     const [ dispatchers, setDispathcers ] = React.useState(null)
 
@@ -79,15 +83,13 @@ const Dispatchers = (props) => {
         })
     }, [])
     
-    const [ page, setPage ] = React.useState(+params.page || 1)
+    const [ page, setPage ] = useQueryState('page', '1')
 
     useEffect(() => {
         setDispathcers(null)
 
         getAllDispatchers(page, params.limit)
         .then(res => {
-            console.log(res)
-            console.log('Page: ' + page)
             setTotalPages(+res.pages)
             setDispathcers(res.docs)
         })
