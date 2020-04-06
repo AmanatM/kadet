@@ -15,10 +15,13 @@ import reports from './icons/reports.svg'
 import historyIcon from './icons/history.svg'
 import settings from './icons/settings.svg'
 import logoutIcon from './icons/logout.svg'
+import collapseIcon from './icons/collapse.svg'
 
 
 const SideNavSection = styled.nav`
     background-color: #2c3e4e;
+    transition: all .2s;
+
     height: 100vh;
     display: inline-block;
     grid-area: nav;
@@ -27,12 +30,26 @@ const SideNavSection = styled.nav`
     overflow-y: scroll;
     grid-area: nav;
     z-index: 2;
+    width: 250px;
+    
+    &.collapsed {
+        width: 60px;
+    }
 
     ul {
+        
+        
         li {
 
             list-style: none;
             color: white;
+
+
+            .text {
+                opacity: 1;
+                white-space: nowrap;
+                transition: all .2s;
+            }
 
             a {
                 display: flex;
@@ -54,30 +71,44 @@ const SideNavSection = styled.nav`
                 img {
                     width: 35px;
                     margin-right: 10px;
+                    transition: all .2s;
+                }
+            }
+        }
+
+        &.collapsed {
+
+
+            li {
+                position: relative;
+
+                a {
+                    display: flex;
+
+
+                    img {
+                        margin-right: 5px;
+                        margin-left: 5px;
+                    }
                 }
             }
 
+            .text {
+                opacity: 0;
+            }
         }
     }
 
 `
 
-const Logo = styled.div`
 
-    padding: 10px;
-    background-color: #1e2d3a;
-    img {
-        width: 50px;
-    }
-`
 
 const Logout = styled.div`
-
     margin-top: auto;
     padding-bottom: 10px;
     display: flex;
     padding-left: 10px;
-    
+    transition: all .2s;
 
 
     button {
@@ -91,13 +122,87 @@ const Logout = styled.div`
         justify-content: center;
         align-items: center;
 
-
         img {
             width: 40px;
             margin-right: 10px;
             min-width: 40px;
-            
         }
+
+        .text {
+            transition: all .2s;
+            opacity: 1;
+        }
+    }
+
+    &.collapsed {
+
+        padding-left: 0;
+        button {
+
+            img {
+                margin: 0;
+            }
+            
+            .text {
+                opacity: 0;
+            }
+        }
+    }
+`
+
+const Top = styled.div`
+    display: flex;
+    background-color: #1e2d3a;
+    align-items: center;
+    height: 60px;
+
+    a {
+        margin-right: auto;
+    }
+
+    img.collapse {
+        cursor: pointer;
+        width: 35px;
+        margin-right: 15px;
+        transform: rotate(180deg);
+        
+    
+        &.true {
+            transform: rotate(0);
+        }
+    }
+
+    &.collapsed {
+        flex-direction: column;
+
+        a {
+            order: 2;
+        }
+
+        img.collapse {
+            height: 60px;
+            margin-right: 0;
+            margin-top: 10px;
+        }
+    }
+`
+
+const Logo = styled.div`
+
+    padding: 10px;
+    background-color: #1e2d3a;
+    margin-right: auto;
+    width: 60px;
+    transition: all .2s;
+    opacity: 1;
+
+    img {
+        width: 100%;
+    }
+
+    &.collapsed {
+        opacity: 0;
+        transition: none;
     }
 `
 
@@ -111,25 +216,27 @@ const SideNav = (props) => {
         history.push("/login")
     }
 
+    const [ collapsed, setCollapsed ] = React.useState(true)
+
 
     return (
-        <SideNavSection>
-            <Link to="/"><Logo><img alt="Логотип" src={logoIcon}/></Logo></Link>
-            <ul>
-                <li><NavLink to='/panel/dispatchers?page=1'><img alt='Диспетчеры' src={dipatchers}/>Диспетчеры</NavLink></li>
-                <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/> Дилерские центры</NavLink></li>
-                <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/>Карты</NavLink></li>
-                <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/>Подрятчики</NavLink></li>
-                <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/>Заказы</NavLink></li>
-                <li><NavLink to='/panel/reviews'><img alt='Отзывы' src={reviews}/>Отзывы</NavLink></li>
-                <li><NavLink to='/panel/reports'><img alt='Отчеты' src={reports}/>Отчеты</NavLink></li>
-                <li><NavLink to='/panel/history'><img alt='История' src={historyIcon}/>История</NavLink></li>
-                <li><NavLink to='/panel/settings'><img alt='Настройки' src={settings}/>Настройки</NavLink></li>
+        <SideNavSection className={collapsed ? 'collapsed' : ''}>
+            <Top className={collapsed ? 'collapsed' : ''}><Link to="/"><Logo className={collapsed ? 'collapsed' : ''}><img alt="Логотип" src={logoIcon}/></Logo></Link> <img onClick={() => setCollapsed(!collapsed)} className={`collapse ${collapsed}`} alt="Закрыть меню" src={collapseIcon}/></Top>
+            <ul className={collapsed ? 'collapsed' : ''}>
+                <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/><span className="text">Диспетчеры</span></NavLink></li>
+                <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/><span className="text">Дилерские центры</span></NavLink></li>
+                <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/><span className="text">Карты</span></NavLink></li>
+                <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/><span className="text">Подрятчики</span></NavLink></li>
+                <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/><span className="text">Заказы</span></NavLink></li>
+                <li><NavLink to='/panel/reviews'><img alt='Отзывы' src={reviews}/><span className="text">Отзывы</span></NavLink></li>
+                <li><NavLink to='/panel/reports'><img alt='Отчеты' src={reports}/><span className="text">Отчеты</span></NavLink></li>
+                <li><NavLink to='/panel/history'><img alt='История' src={historyIcon}/><span className="text">История</span></NavLink></li>
+                <li><NavLink to='/panel/settings'><img alt='Настройки' src={settings}/><span className="text">Настройки</span></NavLink></li>
             </ul>
 
-            <Logout>
+            <Logout className={collapsed ? 'collapsed' : ''}>
                 <button onClick={logOut}>
-                    <img src={logoutIcon} alt="Выйти"/>Выйти
+                    <img src={logoutIcon} alt="Выйти"/><span className="text">Выйти</span>
                 </button>
             </Logout>
         </SideNavSection>

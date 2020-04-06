@@ -20,7 +20,7 @@ const MainFrameStyled = styled.div`
     "nav content content"
     "nav content content";
     grid-template-rows: 60px 1fr;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: auto 1fr;
     grid-gap: 0px;
 
     .content {
