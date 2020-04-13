@@ -6,6 +6,11 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './store'
 
+import LogRocket from 'logrocket'
+import setupLogRocketReact from 'logrocket-react';
+LogRocket.init('cgbvt3/kadet')
+setupLogRocketReact(LogRocket);
+
 const render = () => {
     ReactDOM.render(
 

@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
-import { Link, Route, BrowserRouter as Router } from 'react-router-dom'
+import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import StatusSelect from './StatusSelect'
 import { getAllDispatchers } from "../../services/dispatcherService"
 import Loader from './Loader'
 import { useLocation } from 'react-router-dom'
-import Paginator from './Paginator'
-import Dispatcher from '../Dispatcher/Dispatcher'
 import * as QueryString from "query-string"
-
-import { useQueryState } from "react-router-use-location-state";
-
+import { useQueryState } from "react-router-use-location-state"
 
 import Card from '../../elements/Card'
+import Dispatcher from '../Dispatcher/Dispatcher'
+import StatusSelect from './StatusSelect'
+import Paginator from './Paginator'
+import InnerBar from './InnerBar/InnerBar'
+import AddDispatcher from '../AddDispatcher/AddDispatcher'
 
 
 const DispatchersStyled = styled.div`
@@ -57,11 +57,11 @@ const DispatchersStyled = styled.div`
 
 
 const statusOptions = [
-    { value: 'fired', label: 'Уволен'},
-    { value: 'day_off', label: 'Выходной'},
-    { value: 'active', label: 'Активный'},
-    { value: 'vocation', label: 'В отпуске'},
-    { value: 'sick_leave', label: 'На больничном'},
+    { value: '0', label: 'Уволен'},
+    // { value: 'day_off', label: 'Выходной'},
+    { value: '1', label: 'Активный'},
+    // { value: 'vocation', label: 'В отпуске'},
+    // { value: 'sick_leave', label: 'На больничном'},
 ]
 
 const Dispatchers = (props) => {
@@ -69,17 +69,17 @@ const Dispatchers = (props) => {
     let location = useLocation();
     const params = QueryString.parse(location.search);
 
-    const [ totalPages, setTotalPages ] = React.useState(0)
-    
+    //const [ totalPages, setTotalPages ] = React.useState(0)
 
     const [ dispatchers, setDispathcers ] = React.useState(null)
+    console.log(dispatchers)
 
     useEffect(() => {
 
         getAllDispatchers(params.page, params.limit)
         .then(res => {
-            setTotalPages(+res.pages)
-            setDispathcers(res.docs)
+            //setTotalPages(+res.pages)
+            setDispathcers(res)
         })
     }, [])
     
@@ -90,19 +90,18 @@ const Dispatchers = (props) => {
 
         getAllDispatchers(page, params.limit)
         .then(res => {
-            setTotalPages(+res.pages)
-            setDispathcers(res.docs)
+            //setTotalPages(+res.pages)
+            setDispathcers(res)
         })
     }, [page])
 
 
-
-
-
     return (
         <DispatchersStyled >
-            
-            <Card style={{height: '80vh', overflow: 'scroll'}}>
+
+            <InnerBar/>
+
+            <Card style={{height: '70vh', overflow: 'scroll'}}>
                 {dispatchers ? (
                     <table>
                     <thead>
@@ -120,15 +119,15 @@ const Dispatchers = (props) => {
                         {dispatchers ? dispatchers.map(dispatcher => (
                             <tr className="row_data" key={dispatcher.id}>
                                 <td><input type="checkbox" /></td>
-                                <td> <Link to={`/panel/dispatchers/${dispatcher.id}`}>{dispatcher.username}</Link></td>
-                                <td>{dispatcher.surname} {dispatcher.name}</td>
-                                <td>{dispatcher.position}</td>
+                                <td> <Link to={`/panel/dispatchers/${dispatcher.id}`}>{dispatcher.login}</Link></td>
+                                <td>{dispatcher.secondName} {dispatcher.firstName}</td>
+                                <td>{dispatcher.roleId}</td>
                                 <td className="status">
-                                    <StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}>
+                                    <StatusSelect id={dispatcher.id} selected={dispatcher.userStatus} options={statusOptions}>
     
                                     </StatusSelect>
                                 </td>
-                                <td className="center">{dispatcher.SIPNumber}</td>
+                                <td className="center">{dispatcher.phoneSIPNumber}</td>
 
                             </tr>
                         )) : null}
@@ -137,10 +136,12 @@ const Dispatchers = (props) => {
                 ) : <Loader/>}
                 
             </Card>
+            <Switch>
+                <Route exact path="/panel/dispatchers/add_dispatcher" render={() => <AddDispatcher />}/>
+                <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
+            </Switch>
 
-            <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
-
-            <Paginator totalPages={totalPages} loading={dispatchers} page={page} setPage={setPage}/> 
+            {/* <Paginator totalPages={totalPages} loading={dispatchers} page={page} setPage={setPage}/>  */}
         </DispatchersStyled>
     )
 }

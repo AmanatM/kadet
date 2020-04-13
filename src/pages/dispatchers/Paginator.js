@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import Card from '../../elements/Card'
 import { Link, withRouter } from 'react-router-dom'
 
-import nextIcon from './next.svg'
+import nextIcon from './icons/next.svg'
 
 
 const PaginatorStyled = styled(Card)`
     margin-top: 10px;
-    padding: 3px 20px;
+    padding: 0px 20px;
     display: flex;
     justify-content: flex-end;
 
@@ -17,6 +17,7 @@ const PaginatorStyled = styled(Card)`
         display: flex;
         font-size: .9em;
         align-items: center;
+        background: transparent;
         
         img {
             width: 18px;
@@ -40,7 +41,7 @@ const PaginatorStyled = styled(Card)`
         justify-content: center;
         align-items: center;
         padding: 3px;
-        margin: 10px;
+        margin: 6px 10px;
     }
 `
 

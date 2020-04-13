@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 
 import WelcomeToPanel from '../../components/WelcomeToPanel/WelcomeToPanel'
-import Dispatchers from '../../pages/dispatchers/Dispatchers'
+import Dispatchers from '../../pages/Dispatchers/Dispatchers'
 
 import TopPanel from '../../components/TopPanel/TopPanel'
 

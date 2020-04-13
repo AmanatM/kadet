@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { patchDispatcher } from '../../services/dispatcherService'
 import { notify } from '../../reducers/notifications'
@@ -10,7 +10,7 @@ const SelectStyled = styled.ul`
     box-shadow: 0px 0px 4px 0px rgba(0,0,0,.4);
     border-radius: 10px;
     cursor: pointer;
-    top: -70px;
+    top: 0px;
     left: 0;
     z-index: 99;
     width: 100%;
@@ -48,12 +48,14 @@ const Selected = styled.div`
     font-weight: bold;
     color: white;
     margin: 0 auto;
+    min-width: 110px;
 
-    &.fired {
+
+    &.s1 {
         background-color: #f44336;
     }
 
-    &.active {
+    &.s0 {
         background-color: #4caf50;
     }
 
@@ -72,9 +74,32 @@ const StatusSelect = (props) => {
     const [ active, setActive ] = useState(false)
     const [ selected, setSelected ] = useState(props.selected)
 
-    const openDropDown = () => {
+    const node = useRef()
+
+    const handleClickOutside = e => {
+        if (node.current.contains(e.target)) {
+          // inside click
+          return
+        }
+        setActive(false)
+      };
+
+    const openDropDown = (e) => {
         setActive(!active)
     }
+
+    React.useEffect(() => {
+        if (active) {
+          document.addEventListener("mousedown", handleClickOutside);
+        } else {
+          document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [active]);
+
 
     const select = (id, selection) => {
         const data = [{
@@ -102,13 +127,14 @@ const StatusSelect = (props) => {
         })
     }
 
-    const valueToShow = props.options.filter(option => option.value === selected)
+
+    const valueToShow = props.options.filter(option => +option.value !== +selected)
 
     return (
         <>
-            <Selected className={selected} onClick={openDropDown}>{valueToShow.map(value => value.label)}</Selected>
+            <Selected className={`s${selected}`} onClick={() => setActive(true)}>{valueToShow.map(v => (v.label))}</Selected>
             {active ? (
-                <SelectStyled onMouseLeave={() => setActive(false)} onClick={openDropDown}>
+                <SelectStyled ref={node} onMouseLeave={openDropDown} onClick={(e) => openDropDown(e)}>
                     {props.options.map((option, i) => (<li onClick={() => select(props.id, option.value)} key={i} data-value={option.value}>{option.label}</li>))}
                 </SelectStyled>
             ) : null}

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { getOneDispatcher } from '../../services/dispatcherService'
 import { withRouter } from 'react-router-dom'
-import StatusSelect from '../dispatchers/StatusSelect'
+import StatusSelect from '../Dispatchers/StatusSelect'
 import { parseDate } from '../../utils/dateParser'
 import Loader from './Loader'
 import { connect } from 'react-redux'
@@ -148,11 +148,11 @@ const Dispatcher = (props) => {
     }, [])
 
     const statusOptions = [
-        { value: 'fired', label: 'Уволен'},
-        { value: 'day_off', label: 'Выходной'},
-        { value: 'active', label: 'Активный'},
-        { value: 'vocation', label: 'В отпуске'},
-        { value: 'sick_leave', label: 'На больничном'},
+        { value: '0', label: 'Уволен'},
+        // { value: 'day_off', label: 'Выходной'},
+        { value: '1', label: 'Активный'},
+        // { value: 'vocation', label: 'В отпуске'},
+        // { value: 'sick_leave', label: 'На больничном'},
     ]
 
     const [ editMode, setEditMode ] = React.useState(false)
@@ -196,14 +196,14 @@ const Dispatcher = (props) => {
                         <div className="top">
                             <div className="avatar"><img src={avatar_placeholder}/></div>
                             <div className="right">
-                                {!editMode ? (<h3>{dispatcher.name} {dispatcher.surname}</h3>) : 
+                                {!editMode ? (<h3>{dispatcher.firstName} {dispatcher.secondName}</h3>) : 
                                     (<><input placeholder="Имя" onChange={(e) => setDispatcherNew({...dispatcherNew, name: e.target.value})} value={dispatcherNew.name}/>
                                      <input placeholder="Фамилия" onChange={(e) => setDispatcherNew({...dispatcherNew, surname: e.target.value})} value={dispatcherNew.surname}/>
                                     </> )
                                 }
-                                <p className="username">Имя пользователя: <i><b>{dispatcher.username}</b></i></p>
-                                <p className="position">Позиция: <b>{dispatcher.position}</b></p>
-                                <div className="select"><StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}/></div>
+                                <p className="username">Логин пользователя: <i><b>{dispatcher.login}</b></i></p>
+                                <p className="position">Должность: <b>{dispatcher.roleId}</b></p>
+                                <div className="select"><StatusSelect id={dispatcher.id} selected={dispatcher.userStatus} options={statusOptions}/></div>
                             </div>
                         </div>
 
@@ -213,15 +213,15 @@ const Dispatcher = (props) => {
                                 <img src={email_icon}/>{!editMode ? (<><span>{dispatcher.email}</span></>) : (<input onChange={(e) => setDispatcherNew({...dispatcherNew, email: e.target.value})} value={dispatcherNew.email}/>)}
                                 </div>
                                 <div className="item">
-                                    <img src={phone_icon}/>{!editMode ? (<><span>{dispatcher.SIPNumber}</span></>) : (<input onChange={(e) => setDispatcherNew({...dispatcherNew, SIPNumber: e.target.value})} value={dispatcherNew.SIPNumber}/>)}
+                                    <img src={phone_icon}/>{!editMode ? (<><span>{dispatcher.phoneSIPNumber}</span></>) : (<input onChange={(e) => setDispatcherNew({...dispatcherNew, phoneSIPNumber: e.target.value})} value={dispatcherNew.phoneSIPNumber}/>)}
                                 </div>
                             </div>
                             <div className="right">
                                 <div className="item">
-                                    <img src={clock_icon}/><span>Дата начала работы: <b>{parseDate(dispatcher.jobStartedDate)}</b></span>
+                                    <img src={clock_icon}/><span>Дата начала работы: <b>{parseDate(dispatcher.startWorkDate)}</b></span>
                                 </div>
                                 <div className="item">
-                                    <img src={docs_icon}/><span>Заявок обраотанно: <b>{dispatcher.processedApplications}</b></span>
+                                    <img src={docs_icon}/><span>Заявок обраотанно: <b>{dispatcher.numberOfProcessedApplications}</b></span>
                                 </div>
                             </div>
                         </div>

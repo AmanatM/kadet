@@ -21,18 +21,17 @@ import collapseIcon from './icons/collapse.svg'
 const SideNavSection = styled.nav`
     background-color: #2c3e4e;
     transition: all .2s;
-
     height: 100vh;
     display: inline-block;
     grid-area: nav;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
     grid-area: nav;
-    z-index: 2;
+    z-index: 99;
     width: 250px;
-    
-    &.collapsed {
+
+
+    &.collapsed:not(.mobile) {
         width: 60px;
     }
 
@@ -76,9 +75,7 @@ const SideNavSection = styled.nav`
             }
         }
 
-        &.collapsed {
-
-
+        &.collapsed:not(.mobile) {
             li {
                 position: relative;
 
@@ -95,8 +92,20 @@ const SideNavSection = styled.nav`
 
             .text {
                 opacity: 0;
+                position: absolute;
+                left: -120%;
             }
         }
+    }
+
+    &.mobile {
+        position: fixed;
+        transform: translateX(-100%);
+
+        &.collapsed {
+            transform: translateX(0);
+        }
+        
     }
 
 `
@@ -134,7 +143,7 @@ const Logout = styled.div`
         }
     }
 
-    &.collapsed {
+    &.collapsed:not(.mobile) {
 
         padding-left: 0;
         button {
@@ -165,11 +174,21 @@ const Top = styled.div`
         width: 35px;
         margin-right: 15px;
         transform: rotate(180deg);
-        
+        transition: all .2s;        
     
         &.true {
             transform: rotate(0);
         }
+    }
+
+    &.mobile {
+        img.collapse {
+        transform: rotate(0);
+        
+        &.true {
+            transform: rotate(180deg);
+        }
+    }
     }
 
     &.collapsed {
@@ -180,9 +199,27 @@ const Top = styled.div`
         }
 
         img.collapse {
-            height: 60px;
+
             margin-right: 0;
-            margin-top: 10px;
+            margin-top: 17px;
+        }
+
+        &.mobile {
+            img.collapse {
+                margin-right: 0;
+                margin-top: 0;
+            }
+        }
+    }
+
+    &.mobile {
+        img.collapse {
+            position: fixed;
+            top: 30px;
+            right: -70px;
+            background-color: #2c3e4e;
+            padding: 10px;
+            width: 45px;
         }
     }
 `
@@ -216,13 +253,32 @@ const SideNav = (props) => {
         history.push("/login")
     }
 
-    const [ collapsed, setCollapsed ] = React.useState(true)
+    const [ collapsed, setCollapsed ] = React.useState(false)
+    const [ screenSize, setScreenSize ] = React.useState(window.innerWidth)
+    const [ mobileView, setMobileView ] = React.useState(screenSize < 1000)
+
+
+    React.useEffect(() => {
+        if(screenSize < 1000) {
+            setMobileView(true)
+        } else {
+            setMobileView(false)
+        }
+    }, [screenSize])
+
+
+    React.useEffect(() => {
+
+        window.addEventListener('resize', () =>  setScreenSize(window.innerWidth));
+
+        return () => window.removeEventListener('resize', () =>  setScreenSize(window.innerWidth))
+      }, []);
 
 
     return (
-        <SideNavSection className={collapsed ? 'collapsed' : ''}>
-            <Top className={collapsed ? 'collapsed' : ''}><Link to="/"><Logo className={collapsed ? 'collapsed' : ''}><img alt="Логотип" src={logoIcon}/></Logo></Link> <img onClick={() => setCollapsed(!collapsed)} className={`collapse ${collapsed}`} alt="Закрыть меню" src={collapseIcon}/></Top>
-            <ul className={collapsed ? 'collapsed' : ''}>
+        <SideNavSection className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
+            <Top className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}><Link to="/"><Logo className={collapsed ? 'collapsed' : ''}><img alt="Логотип" src={logoIcon}/></Logo></Link> <img onClick={() => setCollapsed(!collapsed)} className={`collapse ${collapsed}`} alt="Закрыть меню" src={collapseIcon}/></Top>
+            <ul className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
                 <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/><span className="text">Диспетчеры</span></NavLink></li>
                 <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/><span className="text">Дилерские центры</span></NavLink></li>
                 <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/><span className="text">Карты</span></NavLink></li>
@@ -234,7 +290,7 @@ const SideNav = (props) => {
                 <li><NavLink to='/panel/settings'><img alt='Настройки' src={settings}/><span className="text">Настройки</span></NavLink></li>
             </ul>
 
-            <Logout className={collapsed ? 'collapsed' : ''}>
+            <Logout className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
                 <button onClick={logOut}>
                     <img src={logoutIcon} alt="Выйти"/><span className="text">Выйти</span>
                 </button>
