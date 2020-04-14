@@ -52,8 +52,8 @@ const DispatcherStyled = styled.div`
         margin-top: 10px;
     }
 
-    .content {
-        background-color: red;
+    div.content {
+        background-color: #e7e7e7;
         width: 100%;
         max-width: 650px;
         margin: auto;

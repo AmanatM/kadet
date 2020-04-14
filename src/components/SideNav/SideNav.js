@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { NavLink, Link, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -253,12 +253,25 @@ const SideNav = (props) => {
         history.push("/login")
     }
 
+    const node = useRef()
+
+
+
     const [ collapsed, setCollapsed ] = React.useState(false)
     const [ screenSize, setScreenSize ] = React.useState(window.innerWidth)
     const [ mobileView, setMobileView ] = React.useState(screenSize < 1000)
 
+    const handleClickOutside = e => {
+        console.log("clicking anywhere")
+        if (node.current.contains(e.target)) {
+          // inside click
+          return
+        }
+        // outside click
+        setCollapsed(false)
+    }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if(screenSize < 1000) {
             setMobileView(true)
         } else {
@@ -266,8 +279,20 @@ const SideNav = (props) => {
         }
     }, [screenSize])
 
+    useEffect(() => {
+        if (collapsed && screenSize < 1000) {
+          document.addEventListener("mousedown", handleClickOutside)
+        } else {
+          document.removeEventListener("mousedown", handleClickOutside)
+        }
+    
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        }
+      }, [collapsed])
 
-    React.useEffect(() => {
+
+    useEffect(() => {
 
         window.addEventListener('resize', () =>  setScreenSize(window.innerWidth));
 
@@ -276,7 +301,7 @@ const SideNav = (props) => {
 
 
     return (
-        <SideNavSection className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
+        <SideNavSection  ref={node} className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
             <Top className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}><Link to="/"><Logo className={collapsed ? 'collapsed' : ''}><img alt="Логотип" src={logoIcon}/></Logo></Link> <img onClick={() => setCollapsed(!collapsed)} className={`collapse ${collapsed}`} alt="Закрыть меню" src={collapseIcon}/></Top>
             <ul className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
                 <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/><span className="text">Диспетчеры</span></NavLink></li>

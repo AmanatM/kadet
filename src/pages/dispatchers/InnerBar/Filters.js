@@ -78,7 +78,7 @@ const DropDownStyled = styled.div`
 const Dropdown = ({ value, options, onChange }) => {
 
 
-  const node = useRef();
+  const node = useRef()
   const [open, setOpen] = useState(false)
 
   const handleClickOutside = e => {
@@ -94,7 +94,7 @@ const Dropdown = ({ value, options, onChange }) => {
   const handleChange = selectedValue => {
     onChange(selectedValue)
     setOpen(false)
-  };
+  }
 
   useEffect(() => {
     if (open) {
