@@ -20,7 +20,7 @@ const NotificationStyled = styled.div`
     align-items: center;
     box-shadow: 7px 8px 13px 2px rgba(0, 0, 0, 0.35);
     background-color: grey;
-    min-height: 85px;
+    min-height: 75px;
     height: auto;
     color: white;
     padding: 10px 20px;

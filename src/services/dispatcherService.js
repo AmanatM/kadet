@@ -9,8 +9,17 @@ export const getAllDispatchers = async (page = 1, limit = 12) => {
     return res.data
 }
 
-export const patchDispatcher = async (id, data) => {
-    const res = await axios.patch(`${baseUrl}/${id}`, data)
+export const editDispatcher = async (id, data) => {
+    const res = await axios.put(`${baseUrl}/PutUser/${id}`, data)
+    return res.data
+}
+
+export const postDispatcher = async (data) => {
+    const res = await axios.post(`${baseUrl}/PostUser`, data, {
+        headers : {
+            'Content-Type' : 'application/json; charset=UTF-8'
+        }
+    })
     return res.data
 }
 

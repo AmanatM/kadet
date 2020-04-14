@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { patchDispatcher } from '../../services/dispatcherService'
+import { editDispatcher } from '../../services/dispatcherService'
 import { notify } from '../../reducers/notifications'
 import { connect } from 'react-redux'
 
@@ -102,12 +102,12 @@ const StatusSelect = (props) => {
 
 
     const select = (id, selection) => {
-        const data = [{
-            propName: 'status', value: selection
-        }]
+        const data = {
+            RoleId: selection
+        }
         setSelected(selection)
 
-        patchDispatcher(id, data)
+        editDispatcher(id, data)
         .then((res) => {
             setSelected(selection)
             props.notify({
@@ -117,13 +117,15 @@ const StatusSelect = (props) => {
             })
         })
         .catch(err => {
-            setSelected(props.selected)
-            props.notify({
-                heading: 'Ошибка',
-                text: err,
-                time: 3000,
-                type: 'error'
-            })
+            //setSelected(props.selected)
+            // props.notify({
+            //     heading: 'Ошибка',
+            //     text: err,
+            //     time: 3000,
+            //     type: 'error'
+            // })
+
+            console.log(err)
         })
     }
 
