@@ -51,11 +51,11 @@ const Selected = styled.div`
     min-width: 110px;
 
 
-    &.s1 {
+    &.s0 {
         background-color: #f44336;
     }
 
-    &.s0 {
+    &.s1 {
         background-color: #4caf50;
     }
 
@@ -106,6 +106,7 @@ const StatusSelect = (props) => {
             RoleId: selection
         }
         setSelected(selection)
+        console.log(selection)
 
         editDispatcher(id, data)
         .then((res) => {
@@ -130,7 +131,7 @@ const StatusSelect = (props) => {
     }
 
 
-    const valueToShow = props.options.filter(option => +option.value !== +selected)
+    const valueToShow = props.options.filter(option => +option.value === +selected)
 
     return (
         <>

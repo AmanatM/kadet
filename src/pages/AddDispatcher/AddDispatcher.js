@@ -32,9 +32,9 @@ const AddDispatcherStyled = styled.div`
         width: 100%;
         max-width: 650px;
         margin: auto;
-        padding: 40px 20px;
+        padding: 40px 30px;
         background-color: #e7e7e7;
-        border-radius: 5px;
+        border-radius: 10px;
         transform: translateY(-40px);
         position: relative;
         padding-top: 70px;
@@ -154,7 +154,7 @@ const FieldGroup = styled.div`
 
 const InputStyled = styled(Field)`
     border: none;
-    padding: 5px 10px;
+    padding: 8px 10px;
     border-radius: 5px;
     outline: none;
     font-size: .95em;

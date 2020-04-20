@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import { getPositions } from '../../../services/misc/roles'
 
 
 import filterIcon from './icons/filter.svg'
@@ -96,6 +97,13 @@ const Dropdown = ({ value, options, onChange }) => {
     onChange(selectedValue)
     setOpen(false)
   }
+
+  useEffect(() => {
+    getPositions()
+    .then(res => {
+      console.log(res)
+    })
+  })
 
   useEffect(() => {
     if (open) {
