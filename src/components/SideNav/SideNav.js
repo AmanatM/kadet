@@ -4,18 +4,23 @@ import { NavLink, Link, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logout } from '../../reducers/user'
 
-import logoIcon from '../../assets/imgs/logo.svg'
+// import dealer_centers from './icons/dealer_centers.svg'
+// import contractors from './icons/contractors.svg'
+// import reviews from './icons/reviews.svg'
+// import reports from './icons/reports.svg'
+// import historyIcon from './icons/history.svg'
+
 import dipatchers from './icons/dispatchers.svg'
-import dealer_centers from './icons/dealer_centers.svg'
-import cards from './icons/cards.svg'
-import contractors from './icons/contractors.svg'
-import orders from './icons/orders.svg'
-import reviews from './icons/reviews.svg'
-import reports from './icons/reports.svg'
-import historyIcon from './icons/history.svg'
 import settings from './icons/settings.svg'
 import logoutIcon from './icons/logout.svg'
 import collapseIcon from './icons/collapse.svg'
+import orders from './icons/orders.svg'
+import cards from './icons/cards.svg'
+import logoIcon from '../../assets/imgs/logo_white.svg'
+import dashboardIcon from './icons/dashboard.svg'
+
+
+
 
 
 const SideNavSection = styled.nav`
@@ -43,7 +48,6 @@ const SideNavSection = styled.nav`
             list-style: none;
             color: white;
 
-
             .text {
                 opacity: 1;
                 white-space: nowrap;
@@ -58,6 +62,8 @@ const SideNavSection = styled.nav`
                 transition: all .2s;
                 font-weight: bold;
                 font-size: .9em;
+                height: 45px;
+
 
                 &.active {
                     background-color: #213240;
@@ -118,6 +124,7 @@ const Logout = styled.div`
     display: flex;
     padding-left: 10px;
     transition: all .2s;
+    margin-bottom: 30px;
 
 
     button {
@@ -218,6 +225,7 @@ const Top = styled.div`
             top: 30px;
             right: -70px;
             background-color: #2c3e4e;
+            border-radius: 10px;
             padding: 10px;
             width: 45px;
         }
@@ -240,6 +248,11 @@ const Logo = styled.div`
     &.collapsed {
         opacity: 0;
         transition: none;
+
+        &.mobile {
+            opacity: 1;
+            margin-top: 6px;
+        }
     }
 `
 
@@ -254,8 +267,6 @@ const SideNav = (props) => {
     }
 
     const node = useRef()
-
-
 
     const [ collapsed, setCollapsed ] = React.useState(false)
     const [ screenSize, setScreenSize ] = React.useState(window.innerWidth)
@@ -296,23 +307,28 @@ const SideNav = (props) => {
 
         window.addEventListener('resize', () =>  setScreenSize(window.innerWidth));
 
-        return () => window.removeEventListener('resize', () =>  setScreenSize(window.innerWidth))
-      }, []);
+        return () => {
+            window.removeEventListener('resize', () =>  setScreenSize(window.innerWidth))
+        }
+      }, [])
 
 
     return (
         <SideNavSection  ref={node} className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
-            <Top className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}><Link to="/"><Logo className={collapsed ? 'collapsed' : ''}><img alt="Логотип" src={logoIcon}/></Logo></Link> <img onClick={() => setCollapsed(!collapsed)} className={`collapse ${collapsed}`} alt="Закрыть меню" src={collapseIcon}/></Top>
+            <Top className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}><Link to="/"><Logo className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}><img alt="Логотип" src={logoIcon}/></Logo></Link> <img onClick={() => setCollapsed(!collapsed)} className={`collapse ${collapsed}`} alt="Закрыть меню" src={collapseIcon}/></Top>
             <ul className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
+                {/* <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/><span className="text">Дилерские центры</span></NavLink></li> */}
+                <li><NavLink to='/panel/dashboard'><img alt='Панель' src={dashboardIcon}/><span className="text">Панель</span></NavLink></li>
                 <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/><span className="text">Диспетчеры</span></NavLink></li>
-                <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/><span className="text">Дилерские центры</span></NavLink></li>
                 <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/><span className="text">Карты</span></NavLink></li>
-                <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/><span className="text">Подрятчики</span></NavLink></li>
                 <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/><span className="text">Заказы</span></NavLink></li>
+                <li><NavLink to='/panel/profile'><img alt='Настройки' src={settings}/><span className="text">Аккаунт</span></NavLink></li>
+
+                {/* <li><NavLink to='/panel/contractors'><img alt='Подрятчики' src={contractors}/><span className="text">Подрятчики</span></NavLink></li>
                 <li><NavLink to='/panel/reviews'><img alt='Отзывы' src={reviews}/><span className="text">Отзывы</span></NavLink></li>
                 <li><NavLink to='/panel/reports'><img alt='Отчеты' src={reports}/><span className="text">Отчеты</span></NavLink></li>
                 <li><NavLink to='/panel/history'><img alt='История' src={historyIcon}/><span className="text">История</span></NavLink></li>
-                <li><NavLink to='/panel/settings'><img alt='Настройки' src={settings}/><span className="text">Настройки</span></NavLink></li>
+                <li><NavLink to='/panel/settings'><img alt='Настройки' src={settings}/><span className="text">Настройки</span></NavLink></li> */}
             </ul>
 
             <Logout className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>

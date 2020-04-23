@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="352" viewBox="0 0 512 352">
+  <g id="email" transform="translate(0 -80)">
+    <g id="Group_44" data-name="Group 44">
+      <g id="Group_43" data-name="Group 43">
+        <path id="Path_68" data-name="Path 68" d="M339.392,258.624,512,367.744V144.9Z" fill="#2c3e4e"/>
+      </g>
+    </g>
+    <g id="Group_46" data-name="Group 46">
+      <g id="Group_45" data-name="Group 45">
+        <path id="Path_69" data-name="Path 69" d="M0,144.9V367.744l172.608-109.12Z" fill="#2c3e4e"/>
+      </g>
+    </g>
+    <g id="Group_48" data-name="Group 48">
+      <g id="Group_47" data-name="Group 47">
+        <path id="Path_70" data-name="Path 70" d="M480,80H32C16.032,80,3.36,91.9.96,107.232L256,275.264,511.04,107.232C508.64,91.9,495.968,80,480,80Z" fill="#2c3e4e"/>
+      </g>
+    </g>
+    <g id="Group_50" data-name="Group 50">
+      <g id="Group_49" data-name="Group 49">
+        <path id="Path_71" data-name="Path 71" d="M310.08,277.952,264.8,307.776a16.068,16.068,0,0,1-17.6,0L201.92,277.92,1.024,404.992C3.488,420.192,16.1,432,32,432H480c15.9,0,28.512-11.808,30.976-27.008Z" fill="#2c3e4e"/>
+      </g>
+    </g>
+  </g>
+</svg>

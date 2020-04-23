@@ -84,7 +84,6 @@ const Dropdown = ({ value, options, onChange }) => {
   const [open, setOpen] = useState(false)
 
   const handleClickOutside = e => {
-    console.log("clicking anywhere")
     if (node.current.contains(e.target)) {
       // inside click
       return;
@@ -98,12 +97,6 @@ const Dropdown = ({ value, options, onChange }) => {
     setOpen(false)
   }
 
-  useEffect(() => {
-    getPositions()
-    .then(res => {
-      console.log(res)
-    })
-  })
 
   useEffect(() => {
     if (open) {
@@ -140,7 +133,6 @@ const Filters = () => {
 
     const [ statusFilter, setStatusFilter ] = useState('Любой')
     const [ positionFilter, setPositionFilter ] = useState('Любая')
-    console.log(statusFilter)
 
     const statusFilters = ["Любой", "Активыный", 'Выходной', 'На больничном', 'В отпуске', 'Уволен']
 

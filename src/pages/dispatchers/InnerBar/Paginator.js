@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import Card from '../../elements/Card'
 import { Link, withRouter } from 'react-router-dom'
 
 import nextIcon from './icons/next.svg'
 
 
-const PaginatorStyled = styled(Card)`
-    margin-top: 10px;
-    padding: 0px 20px;
+const PaginatorStyled = styled.div`
     display: flex;
     justify-content: flex-end;
 
@@ -18,9 +15,22 @@ const PaginatorStyled = styled(Card)`
         font-size: .9em;
         align-items: center;
         background: transparent;
+        width: 25px;
+        height: 25px;
+        border: 1px solid #2c3e4e;
+        justify-content: center;
+        transition: all .2s;
+
+        &:hover {
+            transform: scale(1.05);
+        }
         
         img {
-            width: 18px;
+            max-width: 100%;
+            width: 13px;
+            transition: all .2s;
+
+
 
             &.goBack {
                 transform-origin: 50% 50%;
@@ -48,34 +58,29 @@ const PaginatorStyled = styled(Card)`
 const Paginator = ({page, setPage, history, loading, totalPages}) => {
 
     useEffect(() => {
-        if(+page < 0) {
-            setPage('1')
-            history.push(`/panel/dispatchers?page=${1}`)
-        }
-        
+        if(+page > totalPages) {
+            setPage(1)
+        } else if(page <= 0) {
+            setPage(1)
+        } 
     }, [])
 
     const goBack = () => {
         if(+page !== 1) {
-            setPage(page-1)
-            history.push(`/panel/dispatchers?page=${+page-1}`)
+            setPage(+page-1)
         }
     }
 
     const goForward = () => {
         if(totalPages > +page) {
             setPage(+page+1)
-            history.push(`/panel/dispatchers?page=${+page+1}`)
         }
     }
 
     return (
         <PaginatorStyled>
-            <button disabled={loading === null ? true : false} onClick={goBack}><img className="goBack" src={nextIcon}/>Prev</button>
-            <div className="page">{page}</div>
-            <button disabled={loading === null ? true : false} onClick={goForward}>Next <img src={nextIcon}/></button>
-
-        
+            <button disabled={loading === null ? true : false} onClick={goBack}><img className="goBack" src={nextIcon}/></button>
+            <button disabled={loading === null ? true : false} onClick={goForward}><img src={nextIcon}/></button>        
         </PaginatorStyled>
     )
 }

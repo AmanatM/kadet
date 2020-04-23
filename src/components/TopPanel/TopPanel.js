@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 
-import userAvatar from './userAvatar.jpg'
+import userAvatar from './avatar.svg'
 
 
 const TopPanelStyled = styled.div`
@@ -24,11 +24,19 @@ const User = styled.div`
     align-items: center;
     cursor: pointer;
 
-    img {
-        width: 35px;
+    .avatar {
         border: 1px solid black;
-        border-radius: 50%;
+        width: 35px;
+        height: 35px;
         margin-left: 10px;
+        border-radius: 50%;
+        padding: 2px;
+        overflow: hidden;
+    }
+
+    img {
+        width: 100%;
+
     }
 `
 
@@ -39,7 +47,9 @@ const TopPanel = (props) => {
             <h3>Панель</h3>
             <User>
                 <b>{props.user ? props.user.username : null}</b>
-                <img alt="Аватар пользователя" src={userAvatar}/>
+                <div className="avatar">
+                    <img alt="Аватар пользователя" src={userAvatar}/>
+                </div>
             </User>
         </TopPanelStyled>
     )

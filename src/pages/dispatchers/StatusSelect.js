@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { editDispatcher } from '../../services/dispatcherService'
+import { patchDispatcher } from '../../services/dispatcherService'
 import { notify } from '../../reducers/notifications'
 import { connect } from 'react-redux'
+
 
 const SelectStyled = styled.ul`
     position: absolute;
@@ -50,19 +51,15 @@ const Selected = styled.div`
     margin: 0 auto;
     min-width: 110px;
 
-
-    &.s0 {
+    &.fired {
         background-color: #f44336;
     }
-
-    &.s1 {
+    &.active {
         background-color: #4caf50;
     }
-
     &.vocation {
         background-color: #2196f3;
     }
-
     &.day_off {
         background-color: #ff9800;
     }
@@ -101,14 +98,13 @@ const StatusSelect = (props) => {
       }, [active]);
 
 
-    const select = (id, selection) => {
-        const data = {
-            RoleId: selection
-        }
+      const select = (id, selection) => {
+        const data = [{
+            propName: 'status', value: selection
+        }]
         setSelected(selection)
-        console.log(selection)
 
-        editDispatcher(id, data)
+        patchDispatcher(id, data)
         .then((res) => {
             setSelected(selection)
             props.notify({
@@ -118,24 +114,22 @@ const StatusSelect = (props) => {
             })
         })
         .catch(err => {
-            //setSelected(props.selected)
-            // props.notify({
-            //     heading: 'Ошибка',
-            //     text: err,
-            //     time: 3000,
-            //     type: 'error'
-            // })
-
-            console.log(err)
+            setSelected(props.selected)
+            props.notify({
+                heading: 'Ошибка',
+                text: err,
+                time: 3000,
+                type: 'error'
+            })
         })
     }
 
 
-    const valueToShow = props.options.filter(option => +option.value === +selected)
+    const valueToShow = props.options.filter(option => option.value === selected)
 
     return (
         <>
-            <Selected className={`s${selected}`} onClick={() => setActive(true)}>{valueToShow.map(v => (v.label))}</Selected>
+            <Selected className={selected} onClick={() => setActive(true)}>{valueToShow.map(v => (v.label))}</Selected>
             {active ? (
                 <SelectStyled ref={node} onMouseLeave={openDropDown} onClick={(e) => openDropDown(e)}>
                     {props.options.map((option, i) => (<li onClick={() => select(props.id, option.value)} key={i} data-value={option.value}>{option.label}</li>))}

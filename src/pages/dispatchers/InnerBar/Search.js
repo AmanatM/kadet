@@ -6,7 +6,8 @@ import searchIcon from './icons/search.svg'
 const SearchStyled = styled.div`
     
     margin: 0 10px;
-    flex: 50% 1 0;
+    flex: 20% 0 0;
+    margin-right: auto;
 
     form {
         position: relative;

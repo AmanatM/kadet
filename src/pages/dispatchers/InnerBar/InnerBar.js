@@ -1,52 +1,45 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-
-import Card from '../../../elements/Card'
+import { Link, useHistory } from 'react-router-dom'
 
 import Filters from './Filters'
 import Search from './Search'
+import Paginator from './Paginator'
+import ShowAmount from './ShowAmount'
 
-import addIcon from './icons/add.svg'
+//import addIcon from './icons/add.svg'
 
-const InnerBarStyled = styled(Card)`
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 13px;
+import ButtonModern from '../../../elements/ButtonModern'
+
+const InnerBarStyled = styled.div`
+    padding: 20px 10px;
     display: flex;
     align-items: center;
-`
 
-const AddDispatcherButton = styled.button`
-    background-color: #3154a3;
-    border-radius: 10px;
-    color: white;
-    font-size: .9em;
-    font-weight: bold;
-    margin-left: 20px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    border-radius: 50%;
-    width: 33px;
-    height: 33px;
-    padding: 7px;
-    min-width: 33px;
-
-    img {
-        width: 100%;
-        max-width: 100%;
+    .page-info {
+        font-size: .9em;
+        margin: 0 15px;
     }
 `
 
-const InnerBar = () => {
+const InnerBar = (props) => {
+
+    let history = useHistory()
+
+    const addDispatcher = () => {
+        history.push('/panel/dispatchers/add_dispatcher')
+    }
 
     return (
         <InnerBarStyled>
-            <Filters/>
-            <Search/>
-
-            <Link to="/panel/dispatchers/add_dispatcher"><AddDispatcherButton><img src={addIcon} alt="Добавить диспетчера"/></AddDispatcherButton></Link>
+            <ButtonModern style={{marginRight: 'auto'}} invert onClick={addDispatcher}>Добавить</ButtonModern>
+            {/* <Filters/> */}
+            {/* <Search/> */}
+            <ShowAmount limit={props.limit} setLimit={props.setLimit}/>
+            <div className="page-info">
+                Стр {props.page} из {props.totalPages === 0 ? '?' : props.totalPages}
+            </div>
+            <Paginator totalPages={props.totalPages} loading={props.dispatchers} page={props.page} setPage={props.setPage}/>
         </InnerBarStyled>
     )
 }

@@ -14,7 +14,7 @@ import PrivateRoute from './components/PrivateRoute'
 const MainPage = (user) => {
   return (
     <div>
-      {user ? <Redirect to="/panel"/> : <Redirect to="/login"/>}
+      {user ? <Redirect to="/panel/dashboard"/> : <Redirect to="/login"/>}
     </div>
   )
 }

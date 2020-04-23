@@ -5,8 +5,12 @@ import SideNav from '../SideNav/SideNav'
 import { connect } from 'react-redux'
 
 
-import WelcomeToPanel from '../../components/WelcomeToPanel/WelcomeToPanel'
+import Dashboard from '../../pages/Dashboard/Dashboard'
 import Dispatchers from '../../pages/Dispatchers/Dispatchers'
+
+import Cards from '../../pages/Cards/Cards'
+import Orders from '../../pages/Orders/Orders'
+import Profile from '../../pages/Profile/Profile'
 
 import TopPanel from '../../components/TopPanel/TopPanel'
 
@@ -23,7 +27,7 @@ const MainFrameStyled = styled.div`
     grid-template-columns: auto 1fr;
     grid-gap: 0px;
 
-    .content {
+    .contentMain {
         grid-area: content;
         padding: 20px;
         overflow: scroll;
@@ -72,19 +76,24 @@ const routes = [
 ]
 
 
-const MainFrame = (props) => {
+const MainFrame = () => {
 
     return (
         <MainFrameStyled>
             <SideNav/>
             <TopPanel/>
 
-                <div className="content">
+                <div className="contentMain">
 
                     <Switch>
-                        <Route exact path="/panel" component={WelcomeToPanel}/>
+                        <Route exact path="/panel/dashboard" component={Dashboard}/>
                         <Route path="/panel/dispatchers" component={Dispatchers}/>
-                        {routes.map((route, index) => <Route key={index} exact path={route.path} render={() => route.component} />)}  
+
+                        <Route path="/panel/cards" component={Cards}/> 
+                        <Route path="/panel/orders" component={Orders}/> 
+                        <Route path="/panel/profile" component={Profile}/> 
+
+                        {/* {routes.map((route, index) => <Route key={index} exact path={route.path} render={() => route.component} />)}   */}
 
                         <Route render={() => <h2>404 - Page not found!</h2>}/>
                     </Switch>
@@ -94,10 +103,5 @@ const MainFrame = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user
-    }
-}
 
-export default connect(mapStateToProps, null)(MainFrame)
+export default MainFrame

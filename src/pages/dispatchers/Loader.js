@@ -1,26 +1,28 @@
-import React from "react"
-import ContentLoader from "react-content-loader" 
+import React from 'react'
+import ContentLoader from 'react-content-loader'
 
-const Loader = () => {
 
-    let tiles = []
+const rowNumbers = [...Array(20).keys()]
 
-    for(let i = 30; i <= 1000; i+=40) {
-        tiles.push(<rect key={i+40} x="11" y={i} rx="0" ry="0" width="100%" height="30" />)
-    }
+const Loader = props => (
 
-    return (
-        <ContentLoader 
-        speed={1}
+    
+    <ContentLoader 
+        speed={2}
         width="100%"
-        height="100%"
+        height="70vh"
         backgroundColor="#f3f3f3"
-        foregroundColor="#d6d6d6"
+        foregroundColor="#ecebeb"
     >
-        {tiles ? tiles.map(item => item) : null}
 
-    </ContentLoader>
-    )
-}
+        {rowNumbers.map(i => (
+            <rect key={i} x="0px" y={`${(i+1) * 45 - 50}px`} rx="0" ry="0" width="100%" height="35" /> 
+        ))}
+
+
+
+  </ContentLoader>
+)
+
 
 export default Loader

@@ -142,7 +142,7 @@ const LoginPage = (props) => {
 
     function fillData() {
         setUser({
-            username: 'admin',
+            username: 'amurzaliev',
             password: 'admin'
         })
 
@@ -158,7 +158,7 @@ const LoginPage = (props) => {
         setLoading(true)
         props.login(user)
         .then((res) => {
-            history.push("/panel")
+            history.push("/panel/dashboard")
         })
         .catch((err) => {
             console.error(err)

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { notify } from '../../reducers/notifications'
+import { notify, clearNotifications } from '../../reducers/notifications'
 import { postDispatcher } from '../../services/dispatcherService'
 
 
@@ -175,6 +175,7 @@ const AddDispatcher = (props) => {
     }
 
     const confirmation = (e) => {
+        props.clearNotifications()
         props.notify({
             heading: 'Вы уверены?',
             text: 'Данные будут сброшены',
@@ -203,20 +204,20 @@ const AddDispatcher = (props) => {
     }
 
     const onSubmit = (values, { setSubmitting }) => {
-        postDispatcher(values)
-        .then(res => {
-            console.log(res)
+        // postDispatcher(values)
+        // .then(res => {
+        //     console.log(res)
 
-            props.notify({
-                type: 'success',
-                heading: 'Диспетчер добавлен!',
-                time: 2000
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        setSubmitting(false)
+        //     props.notify({
+        //         type: 'success',
+        //         heading: 'Диспетчер добавлен!',
+        //         time: 2000
+        //     })
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        // })
+        // setSubmitting(false)
     }
 
     return (
@@ -321,4 +322,4 @@ const AddDispatcher = (props) => {
     )
 }
 
-export default connect(null, {notify})(withRouter(AddDispatcher))
+export default connect(null, {notify, clearNotifications})(withRouter(AddDispatcher))
