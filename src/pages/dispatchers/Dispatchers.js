@@ -89,14 +89,12 @@ const Dispatchers = (props) => {
 
     useEffect(() => {
 
-
- 
-
         setDispathcers(null)
         getAllDispatchers(page, limit)
         .then(res => {
             setDispathcers(res.docs)
             setTotalPages(+res.pages)
+            console.log(res)
         })
         .catch(err => {
             console.error(err)
@@ -107,7 +105,7 @@ const Dispatchers = (props) => {
 
         return (
             <DispatchersStyled >
-                <CardCustom style={{minHeight: '80vh'}}>
+                <CardCustom style={!dispatchers ?  { minHeight: '80vh' }  : null}>
                 <InnerBar limit={limit} setLimit={setLimit} totalPages={totalPages} loading={dispatchers} page={page} setPage={setPage}/>
             {dispatchers ? (
                     <table>
@@ -143,7 +141,7 @@ const Dispatchers = (props) => {
 
                 <Switch>
                     <Route exact path="/panel/dispatchers/add_dispatcher" render={() => <AddDispatcher />}/>
-                    <Route exact path="/panel/dispatchers/:id" render={({match}) => <Dispatcher id={match.params.id}/>}/>
+                    <Route exact path={`/panel/dispatchers/:id`} render={({match}) => <Dispatcher id={match.params.id}/>}/>
                 </Switch>
 
               

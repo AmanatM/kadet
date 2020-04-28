@@ -127,7 +127,8 @@ const Dispatcher = (props) => {
                             <div className="avatar"><img src={avatar_placeholder}/></div>
                             <div className="right">
                                 <h3>{dispatcher.name} {dispatcher.surname}</h3>
-                                <p className="username">Имя пользователя: <i><b>{dispatcher.username}</b></i></p>
+                                <p className="username">Username: <i><b>{dispatcher.username}</b></i></p>
+                                <p className="username">Пароль: <i><b>{dispatcher.password}</b></i></p>
                                 <p className="position">Позиция: <b>{dispatcher.position}</b></p>
                                 <div className="select"><StatusSelect id={dispatcher.id} selected={dispatcher.status} options={statusOptions}/></div>
                             </div>

@@ -18,7 +18,7 @@ const ShowAmount = (props) => {
 
     return (
         <ShowAmountStyled>
-            <span>Паказывать: </span>
+            <span>Показывать: </span>
             <select value={props.limit} onChange={changeAmount}>
                 {limitOptins.map(option => (
                 <option value={option} key={option}>

@@ -12,6 +12,7 @@ import ButtonModern from '../../elements/ButtonModern'
 import avatarIcon from '../../components/TopPanel/avatar.svg'
 import emailIcon from './icons/email.svg'
 import checkIcon from './icons/check.svg'
+import noIcon from './icons/no.svg'
 
 import Loader from './Loader'
 
@@ -92,7 +93,10 @@ const Profile = (props) => {
     }
 
     useEffect(() => {
-        getUserData('5e5dc8d98e522c523acd9fc8')
+
+        let userFromLocal= JSON.parse(window.localStorage.getItem('user'))  
+    
+        getUserData(userFromLocal.id)
         .then( res => {
             console.log(res)
             setUser(res)
@@ -123,7 +127,7 @@ const Profile = (props) => {
                         </div>
 
                         <div className="adminStatus">
-                            Права администратора: {user.admin ? <img src={checkIcon}/> : <b>Прав нет</b>}
+                            Права администратора: {user.admin ? <img src={checkIcon}/> : <img src={noIcon}/>}
                         </div>
                         <ButtonModern onClick={logOut}>Выйти</ButtonModern>
                     </div>
@@ -132,5 +136,6 @@ const Profile = (props) => {
         </ProfileStyled>
     )
 }
+
 
 export default connect(null, {notify, logout})(Profile)

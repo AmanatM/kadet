@@ -8,6 +8,11 @@ export const getAllDispatchers = async (page = 1, limit = 4) => {
     return res.data
 }
 
+export const postDispatcher = async (data) => {
+    const res = await axios.post(`${baseUrl}`, data,  {headers: authHeader()})
+    return res.data
+}
+
 export const patchDispatcher = async (id, data) => {
     const res = await axios.patch(`${baseUrl}/${id}`, data, {headers: authHeader()})
     return res.data

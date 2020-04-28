@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import userAvatar from './avatar.svg'
 
@@ -19,7 +20,7 @@ const TopPanelStyled = styled.div`
     }
 `
 
-const User = styled.div`
+const User = styled(Link)`
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -45,7 +46,7 @@ const TopPanel = (props) => {
     return (
         <TopPanelStyled>
             <h3>Панель</h3>
-            <User>
+            <User to="/panel/profile">
                 <b>{props.user ? props.user.username : null}</b>
                 <div className="avatar">
                     <img alt="Аватар пользователя" src={userAvatar}/>

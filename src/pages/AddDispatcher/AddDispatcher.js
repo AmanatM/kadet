@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { notify, clearNotifications } from '../../reducers/notifications'
 import { postDispatcher } from '../../services/dispatcherService'
+import StatusPicker from './StatusPicker'
+import Loader from 'react-loader-spinner'
 
 
 import Button from '../../elements/Button'
@@ -13,7 +15,8 @@ import userIcon from './icons/user.svg'
 import passwordIcon from './icons/password.svg'
 import emailIcon from './icons/email.svg'
 import phoneIcon from './icons/phone.svg'
-import languageIcon from './icons/language.svg'
+import calendarIcon from './icons/calendar.svg'
+import PositionPicker from './PositionPicker'
 
 const AddDispatcherStyled = styled.div`
     position: absolute;
@@ -23,7 +26,7 @@ const AddDispatcherStyled = styled.div`
     left: 0;
     background: rgba(0, 0, 0, .5);
     z-index: 99;
-    padding: 20px;
+    padding: 40px 20px;
     height: 100vh;
     width: 100%;
     display: flex;
@@ -35,9 +38,9 @@ const AddDispatcherStyled = styled.div`
         padding: 40px 30px;
         background-color: #e7e7e7;
         border-radius: 10px;
-        transform: translateY(-40px);
         position: relative;
         padding-top: 70px;
+
 
         .card_title {
             background-color: #2c3e4e;
@@ -94,8 +97,14 @@ const FormStyled = styled(Form)`
 
         &.full_name {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: space-around;
+
+            div:first-child {
+                padding-right: 20px;
+            }
+            div:last-child {
+                padding-left: 20px;
+            }
         }   
 
         &.credentials {   
@@ -114,6 +123,30 @@ const FormStyled = styled(Form)`
                 }
             }            
         }  
+
+        &.status_position {
+            margin-bottom: 20px;
+            .form_content {
+                display: flex;
+
+                .status {
+                    flex: 50% 0 0;
+                    margin-right: 20px;
+                    position: relative;
+
+                    label {
+                        margin-bottom: 10px;
+                        font-size: .85em;
+                    }
+                }
+
+                .position {
+                    flex: 50% 0 0;
+                    margin-right: 20px;
+                    position: relative;
+                }
+            }
+        }
     }
 
 
@@ -123,7 +156,7 @@ const FormStyled = styled(Form)`
 const FieldGroup = styled.div`
     position: relative;
     margin: 20px 0;
-
+    width: 100%;
 
     label {
         position: absolute;
@@ -184,41 +217,73 @@ const AddDispatcher = (props) => {
         })
     }
 
-
+    const [ selectedStatus, setSelectedStatus ] = useState('active')
+    const [ selectedPosition, setSelectedPosition ] = useState('Диспетчер')
 
     const initialValues = {
-        FirstName: '',
-        SecondName: '',
-        ThirdName: '',
-        RoleId: '', 
-        StartWorkDate: '',
-        CountryId: '',
-        MainLanguage: '',
-        AnotherLanguage: '',
-        Login: '',
-        Password: '',
-        PhoneNumber: '',
-        Email: '',
-        Timezone: '21',
-        PhoneSIPNumber: '',
+        username: '',
+        name: '',
+        surname: '',
+        SIPNumber: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
+        jobStartedDate: '',
+        processedApplications: ''
     }
+
+    const [ loading, setLoading ] = useState(false)
+
+    let history = useHistory()
 
     const onSubmit = (values, { setSubmitting }) => {
-        // postDispatcher(values)
-        // .then(res => {
-        //     console.log(res)
 
-        //     props.notify({
-        //         type: 'success',
-        //         heading: 'Диспетчер добавлен!',
-        //         time: 2000
-        //     })
-        // })
-        // .catch(err => {
-        //     console.log(err)
-        // })
-        // setSubmitting(false)
+        setLoading(true)
+        let dataToSend = {
+            ...values,
+            status: selectedStatus,
+            position: selectedPosition
+        }
+        postDispatcher(dataToSend)
+        .then(res => {
+           console.log(res)
+
+           setLoading(false)
+
+           history.push(`/panel/dispatchers/${res.id}`)
+
+            props.notify({
+                type: 'success',
+                heading: 'Диспетчер добавлен!',
+                time: 2000
+            })
+         })
+         .catch(err => {
+
+            setLoading(false)
+            props.notify({
+                type: 'error',
+                heading: 'Что-то пошло не так!',
+                time: 2000
+            })
+            console.log(err)
+         })
+        
+
     }
+
+
+    const statusOptions = [
+        { value: 'fired', label: 'Уволен'},
+        { value: 'day_off', label: 'Выходной'},
+        { value: 'active', label: 'Активный'},
+        { value: 'vocation', label: 'В отпуске'},
+        { value: 'sick_leave', label: 'На больничном'},
+    ]
+
+    const positionOptions = ['Диспетчер', 'Старший диспетчер', 'Служба контроля качества', 'Выделенный под проект']
+
+
 
     return (
         <AddDispatcherStyled>
@@ -231,15 +296,11 @@ const AddDispatcher = (props) => {
                         <div className="form_line full_name">
                             <FieldGroup>
                                 <label htmlFor="FirstName">Имя: </label>
-                                <InputStyled required placeholder="Имя" name="FirstName" type="text" />
+                                <InputStyled required placeholder="Имя" name="name" type="text" />
                             </FieldGroup>
                             <FieldGroup>
                                 <label htmlFor="SecondName">Фамилия: </label>
-                                <InputStyled required placeholder="Фамилия" name="SecondName" type="text" />
-                            </FieldGroup>
-                            <FieldGroup>
-                                <label htmlFor="ThirdName">Отчество: </label>
-                                <InputStyled required placeholder="Фамилия" name="ThirdName" type="text" />
+                                <InputStyled required placeholder="Фамилия" name="surname" type="text" />
                             </FieldGroup>
                         </div>
 
@@ -251,14 +312,14 @@ const AddDispatcher = (props) => {
                                     <label htmlFor="Login">Логин: </label>
                                     <div className="with_image">
                                         <img src={userIcon}/>
-                                        <InputStyled required placeholder="Логин" name="Login" type="text"/>
+                                        <InputStyled required placeholder="Логин" name="username" type="text"/>
                                     </div>
                                 </FieldGroup>
                                 <FieldGroup>
                                     <label htmlFor="Login">Пароль: </label>
                                     <div className="with_image">
                                         <img src={passwordIcon}/>
-                                        <InputStyled required placeholder="Пароль" name="Password" type="password"/>
+                                        <InputStyled required placeholder="Пароль" name="password" type="password"/>
                                     </div>
                                 </FieldGroup>
                             </div>
@@ -269,7 +330,7 @@ const AddDispatcher = (props) => {
                             <label htmlFor="Email">Email: </label>
                             <div className="with_image">
                                 <img src={emailIcon}/>
-                                <InputStyled required placeholder="Email" name="Email" type="email"/>
+                                <InputStyled required placeholder="Email" name="email" type="email"/>
                             </div>
                         </FieldGroup>
 
@@ -282,14 +343,28 @@ const AddDispatcher = (props) => {
                                     <label htmlFor="PhoneNumber">Телефон: </label>
                                     <div className="with_image">
                                         <img src={phoneIcon}/>
-                                        <InputStyled required placeholder="Телефон" name="PhoneNumber" type="tel"/>
+                                        <InputStyled required placeholder="Телефон" name="phoneNumber" type="tel"/>
                                     </div>
                                 </FieldGroup>
 
                                 <FieldGroup>
                                     <label htmlFor="PhoneSIPNumber">SIP Номер: </label>
-                                    <InputStyled required placeholder="Телефон" name="PhoneSIPNumber" type="number"/>
+                                    <InputStyled required placeholder="SIP Номер" name="SIPNumber" type="number"/>
                                 </FieldGroup>
+                            </div>
+                        </div>
+
+                        <div className="form_line status_position">
+                            <div className="form_content">
+                                <div className="status">
+                                    <label htmlFor="MainLanguage">Статус: </label>
+                                    <StatusPicker selected={selectedStatus} setSelected={setSelectedStatus} options={statusOptions}/>
+                                </div>
+
+                                <div className="position">
+                                    <label htmlFor="AnotherLanguage">Позиция </label>
+                                    <PositionPicker selected={selectedPosition} setSelected={setSelectedPosition} options={positionOptions}/>
+                                </div>
                             </div>
                         </div>
 
@@ -297,24 +372,21 @@ const AddDispatcher = (props) => {
                             <div className="form_content">
 
                                 <FieldGroup>
-                                    <label htmlFor="MainLanguage">Основой язык: </label>
+                                    <label htmlFor="PhoneNumber">Дата начала работы: </label>
                                     <div className="with_image">
-                                        <img src={languageIcon}/>
-                                        <InputStyled required placeholder="Основой язык:" name="MainLanguage" type="text"/>
+                                        <img src={calendarIcon}/>
+                                        <InputStyled required placeholder="Дата" name="jobStartedDate" type="date"/>
                                     </div>
                                 </FieldGroup>
 
                                 <FieldGroup>
-                                    <label htmlFor="AnotherLanguage">Дополнительный язык: </label>
-                                    <div className="with_image">
-                                        <img src={languageIcon}/>
-                                        <InputStyled required placeholder="Дополнительный язык:" name="AnotherLanguage" type="text"/>
-                                    </div>
+                                    <label htmlFor="PhoneSIPNumber">Обработранно заявок</label>
+                                    <InputStyled required placeholder="Кол-во обработанных заявок" name="processedApplications" type="number"/>
                                 </FieldGroup>
                             </div>
                         </div>
 
-                        <SubmitButton className="submit_btn" type="submit">Добавить</SubmitButton>
+                        <SubmitButton className="submit_btn" type="submit">{loading ? <Loader type="Puff" color="#000" height={15} width={15}/> : "Добавить"}</SubmitButton>
                     </FormStyled>
                 </Formik>
             </div>

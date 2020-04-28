@@ -87,7 +87,8 @@ const MainFrame = () => {
 
                     <Switch>
                         <Route exact path="/panel/dashboard" component={Dashboard}/>
-                        <Route path="/panel/dispatchers" component={Dispatchers}/>
+                        {JSON.parse(window.localStorage.getItem('user')).admin ? (<Route path="/panel/dispatchers" component={Dispatchers}/>): null}
+                        
 
                         <Route path="/panel/cards" component={Cards}/> 
                         <Route path="/panel/orders" component={Orders}/> 

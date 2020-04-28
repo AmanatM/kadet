@@ -32,14 +32,15 @@ const InnerBar = (props) => {
 
     return (
         <InnerBarStyled>
-            <ButtonModern style={{marginRight: 'auto'}} invert onClick={addDispatcher}>Добавить</ButtonModern>
+            <ButtonModern style={{marginRight: 'auto'}} onClick={addDispatcher}>Добавить</ButtonModern>
             {/* <Filters/> */}
             {/* <Search/> */}
             <ShowAmount limit={props.limit} setLimit={props.setLimit}/>
             <div className="page-info">
-                Стр {props.page} из {props.totalPages === 0 ? '?' : props.totalPages}
+                Стр. {props.page} из {props.totalPages === 0 ? '?' : props.totalPages}
             </div>
             <Paginator totalPages={props.totalPages} loading={props.dispatchers} page={props.page} setPage={props.setPage}/>
+
         </InnerBarStyled>
     )
 }

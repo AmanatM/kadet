@@ -319,7 +319,8 @@ const SideNav = (props) => {
             <ul className={`${collapsed ? 'collapsed' : ''} ${mobileView ? 'mobile' : ''}`}>
                 {/* <li><NavLink to='/panel/dealer_centers'><img alt=' Дилерские центры' src={dealer_centers}/><span className="text">Дилерские центры</span></NavLink></li> */}
                 <li><NavLink to='/panel/dashboard'><img alt='Панель' src={dashboardIcon}/><span className="text">Панель</span></NavLink></li>
-                <li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/><span className="text">Диспетчеры</span></NavLink></li>
+                {JSON.parse(window.localStorage.getItem('user')).admin ?  (<li><NavLink to='/panel/dispatchers'><img alt='Диспетчеры' src={dipatchers}/><span className="text">Диспетчеры</span></NavLink></li>) : null}
+                
                 <li><NavLink to='/panel/cards'><img alt='Карты' src={cards}/><span className="text">Карты</span></NavLink></li>
                 <li><NavLink to='/panel/orders'><img alt='Заказы' src={orders}/><span className="text">Заказы</span></NavLink></li>
                 <li><NavLink to='/panel/profile'><img alt='Настройки' src={settings}/><span className="text">Аккаунт</span></NavLink></li>
