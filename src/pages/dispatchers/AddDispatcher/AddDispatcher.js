@@ -3,14 +3,14 @@ import styled from 'styled-components'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { withRouter, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { notify, clearNotifications } from '../../reducers/notifications'
-import { postDispatcher } from '../../services/dispatcherService'
+import { notify, clearNotifications } from '../../../reducers/notifications'
+import { postDispatcher } from '../../../services/dispatcherService'
 import StatusPicker from './StatusPicker'
 import Loader from 'react-loader-spinner'
 
 
-import Button from '../../elements/Button'
-import closeIcon from '../../assets/imgs/close_icon.svg'
+import Button from '../../../elements/Button'
+import closeIcon from '../../../assets/imgs/close_icon.svg'
 import userIcon from './icons/user.svg'
 import passwordIcon from './icons/password.svg'
 import emailIcon from './icons/email.svg'
@@ -19,7 +19,8 @@ import calendarIcon from './icons/calendar.svg'
 import PositionPicker from './PositionPicker'
 
 const AddDispatcherStyled = styled.div`
-    position: absolute;
+    position: fixed;
+    overflow: scroll;
     top: 0px;
     width: 500px;
     height: 40px;
@@ -204,7 +205,7 @@ const AddDispatcher = (props) => {
 
     const closeUserInfo = (e) => {
         e.stopPropagation()
-        return props.history.push('/panel/dispatchers/')
+        return props.history.push('/panel/dispatchers')
     }
 
     const confirmation = (e) => {

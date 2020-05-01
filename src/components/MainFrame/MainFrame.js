@@ -11,6 +11,7 @@ import Dispatchers from '../../pages/Dispatchers/Dispatchers'
 import Cards from '../../pages/Cards/Cards'
 import Orders from '../../pages/Orders/Orders'
 import Profile from '../../pages/Profile/Profile'
+import ActivateCard from '../../pages/Cards/ActivateCard/ActivateCard'
 
 import TopPanel from '../../components/TopPanel/TopPanel'
 
@@ -90,6 +91,7 @@ const MainFrame = () => {
                         {JSON.parse(window.localStorage.getItem('user')).admin ? (<Route path="/panel/dispatchers" component={Dispatchers}/>): null}
                         
 
+                        <Route exact path="/panel/cards/activate/:id" render={({match}) => <ActivateCard id={match.params.id}/>}/>
                         <Route path="/panel/cards" component={Cards}/> 
                         <Route path="/panel/orders" component={Orders}/> 
                         <Route path="/panel/profile" component={Profile}/> 

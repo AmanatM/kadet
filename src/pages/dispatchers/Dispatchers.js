@@ -5,9 +5,9 @@ import StatusSelect from './StatusSelect'
 import { getAllDispatchers } from "../../services/dispatcherService"
 import Loader from './Loader'
 import { useLocation } from 'react-router-dom'
-import Dispatcher from '../Dispatcher/Dispatcher'
+import Dispatcher from './Dispatcher/Dispatcher'
 import { useQueryState } from "react-router-use-location-state"
-import AddDispatcher from '../AddDispatcher/AddDispatcher'
+import AddDispatcher from './AddDispatcher/AddDispatcher'
 
 import Card from '../../elements/Card'
 import InnerBar from './InnerBar/InnerBar'
@@ -141,7 +141,9 @@ const Dispatchers = (props) => {
 
                 <Switch>
                     <Route exact path="/panel/dispatchers/add_dispatcher" render={() => <AddDispatcher />}/>
+
                     <Route exact path={`/panel/dispatchers/:id`} render={({match}) => <Dispatcher id={match.params.id}/>}/>
+
                 </Switch>
 
               

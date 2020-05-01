@@ -4,7 +4,7 @@ import { notify } from '../../reducers/notifications'
 import { connect } from 'react-redux'
 
 
-const PositoinsPickerStyled = styled.ul`
+const SelectStyled = styled.ul`
     position: absolute;
     background-color: white;
     box-shadow: 0px 0px 4px 0px rgba(0,0,0,.4);
@@ -40,22 +40,26 @@ const PositoinsPickerStyled = styled.ul`
 const Selected = styled.div`
     cursor: pointer;
     font-size: .8em;
-    background-color: grey;
+    background-color: #a7a7a7;
     border-radius: 30px;
-    margin-right: 20px;
-    margin-top: 5px;
+    max-width: 110px;
     padding: 3px;
     text-align: center;
     font-weight: bold;
     color: white;
+    margin: 0 auto;
     min-width: 110px;
 
+    &.active {
+        background-color: #4caf50;
+    }
 `
 
 
-const PositoinsPicker = ({selected, setSelected, options}) => {
+const StatusSelect = (props) => {
 
     const [ active, setActive ] = useState(false)
+    const [ selected, setSelected ] = useState(props.selected)
 
     const node = useRef()
 
@@ -84,23 +88,27 @@ const PositoinsPicker = ({selected, setSelected, options}) => {
       }, [active]);
 
 
-      const select = (selection) => {
+      const select = (id, selection) => {
+        const data = [{
+            propName: 'status', value: selection
+        }]
         setSelected(selection)
+
     }
 
 
-    const valueToShow = options.filter(option => option === selected)
+    const valueToShow = props.options.filter(option => option.value === selected)
 
     return (
         <>
-            <Selected className={selected} onClick={() => setActive(true)}>{valueToShow[0]}</Selected>
+            <Selected className={selected ? 'active' : ''} onClick={() => setActive(true)}>{valueToShow.map(v => (v.label))}</Selected>
             {active ? (
-                <PositoinsPickerStyled ref={node} onMouseLeave={openDropDown} onClick={(e) => openDropDown(e)}>
-                    {options.map((option, i) => (<li onClick={() => select(option)} key={i} data-value={option}>{option}</li>))}
-                </PositoinsPickerStyled>
+                <SelectStyled ref={node} onMouseLeave={openDropDown} onClick={(e) => openDropDown(e)}>
+                    {props.options.map((option, i) => (<li onClick={() => select(props.id, option.value)} key={i} data-value={option.value}>{option.label}</li>))}
+                </SelectStyled>
             ) : null}
         </>
     )
 }
 
-export default connect(null, { notify })(PositoinsPicker)
+export default connect(null, { notify })(StatusSelect)

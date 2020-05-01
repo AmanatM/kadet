@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import { getOneDispatcher } from '../../services/dispatcherService'
+import { getOneDispatcher } from '../../../services/dispatcherService'
 import { withRouter } from 'react-router-dom'
-import StatusSelect from '../Dispatchers/StatusSelect'
-import { parseDate } from '../../utils/dateParser'
+import StatusSelect from '../StatusSelect'
+import { parseDate } from '../../../utils/dateParser'
 import Loader from './Loader'
 
 import avatar_placeholder from './icons/avatar_placeholder.svg'
@@ -13,7 +13,8 @@ import clock_icon from './icons/clock_icon.svg'
 import docs_icon from './icons/docs_icon.svg'
 
 const DispatcherStyled = styled.div`
-    position: absolute;
+    position: fixed;
+    overflow: scroll;
     top: 0px;
     width: 500px;
     height: 40px;
@@ -24,6 +25,7 @@ const DispatcherStyled = styled.div`
     height: 100vh;
     width: 100%;
     display: flex;
+    z-index: 99;
 
     .content {
         background-color: rgb(231, 231, 231);
@@ -114,7 +116,7 @@ const Dispatcher = (props) => {
 
     const closeUserInfo = (e) => {
         e.stopPropagation()
-        return props.history.push('/panel/dispatchers/')
+        return props.history.push('/panel/dispatchers')
     }
 
     return (
