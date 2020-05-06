@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link, Route, Switch} from 'react-router-dom'
 import styled from 'styled-components'
 import StatusSelect from './StatusSelect'
-import { getAllCards } from "../../services/cardsService"
+import { getAllCards, getInactiveCards, searchByLastName, searchByVIN, searchByCardNumber } from "../../services/cardsService"
 import Loader from './Loader'
 import { useLocation } from 'react-router-dom'
 import ViewCard from './ViewCard/ViewCard'
@@ -54,8 +54,8 @@ const CardsStyled = styled.div`
 
 
 const statusOptions = [
-    { value: true, label: 'Активна'},
-    { value: false, label: 'Деактивирована'}
+    { value: 1, label: 'Активна'},
+    { value: 0, label: 'Деактивирована'}
 ]
 
 const Cards = (props) => {
@@ -64,46 +64,104 @@ const Cards = (props) => {
 
     const [ totalPages, setTotalPages ] = React.useState(0)
 
-    useEffect(() => {
 
+    useEffect(() => {
         getAllCards()
         .then(res => {
-            setCards(res.docs)
+            setCards(res)
             setTotalPages(+res.pages)
         })
         .catch(err => {
             console.error(err)
         })
-
     }, [])
 
-
     const [ cards, setCards ] = React.useState(null)
+    
+    console.log(cards)
 
     const [ page, setPage ] = useQueryState('page', 1)
     const [ limit, setLimit ] = useQueryState('limit', 10)
 
+    const [ type, setType ] = useQueryState('type', 'active')
+    const [ searchValue, setSearchValue ] = useQueryState('search', '')
+    const [ searchOption, setSearchOption ] = useQueryState('searchOption', 'surname')
 
     useEffect(() => {
 
         setCards(null)
-        getAllCards(page, limit)
-        .then(res => {
-            setCards(res.docs)
-            setTotalPages(+res.pages)
-            console.log(res)
-        })
-        .catch(err => {
-            console.error(err)
-        })
+        setSearchValue('')
 
-    }, [page, limit])
+        if(type === 'inactive') {
+            getAllCards()
+            .then(res => {
+                setCards(res)
+                setTotalPages(+res.pages)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    
+        } else if(type === 'active') {
+
+            getInactiveCards()
+            .then(res => {
+                setCards(res)
+                setTotalPages(+res.pages)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    
+        }
+
+    }, [type])
+
+    const [ searchLoading, setSearchLoading ] = React.useState(false)
+
+    useEffect(() => {
+
+        setSearchLoading(true)
+        setType('all')
+
+        if(searchOption === 'surname') {
+            searchByLastName(searchValue)
+            .then(res => {
+                setCards(res)
+                setSearchLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+            })    
+            
+        } else if(searchOption === 'vin') {
+            searchByVIN(searchValue)
+            .then(res => {
+                setCards(res)
+                setSearchLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+            })    
+            
+        } else if(searchOption === 'cardNumber') {
+            searchByCardNumber(searchValue)
+            .then(res => {
+                setCards(res)
+                setSearchLoading(false)
+            })
+            .catch(err => {
+                console.error(err)
+            })    
+            
+        }
+    }, [searchOption, searchValue])
 
 
         return (
             <CardsStyled >
                 <CardCustom style={!cards ?  { minHeight: '80vh' }  : null}>
-                <InnerBar limit={limit} setLimit={setLimit} totalPages={totalPages} loading={cards} page={page} setPage={setPage}/>
+                <InnerBar searchLoading={searchLoading} searchOption={searchOption} setSearchOption={setSearchOption} searchValue={searchValue} setSearchValue={setSearchValue} type={type} setType={setType} limit={limit} setLimit={setLimit} totalPages={totalPages} loading={cards} page={page} setPage={setPage}/>
             {cards ? (
                     <table>
                         <thead>
@@ -117,10 +175,10 @@ const Cards = (props) => {
                         <tbody>
                             {cards.map(card => (
                                <tr className="row_data" key={card.id}>
-                                    <td> <Link to={`/panel/cards/${card.id}`}>{card.number}</Link></td>
-                                    <td>{card.serviceList}</td>
+                                    <td> <Link to={`/panel/cards/${card.id}`}>{card.cardNumber}</Link></td>
+                                    <td>{card.servicesId}</td>
                                     <td className="status">
-                                        <StatusSelect id={card.id} selected={card.active} options={statusOptions}>
+                                        <StatusSelect id={card.id} selected={card.cardStatus} options={statusOptions}>
      
                                         </StatusSelect>
                                     </td>    

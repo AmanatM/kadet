@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import Loader from 'react-loader-spinner'
-
 
 import searchIcon from './icons/search.svg'
 
 const SearchStyled = styled.div`
     
     margin: 0 10px;
-    flex: 50% 0 0;
+    flex: 20% 0 0;
     margin-right: auto;
 
     form {
@@ -39,12 +37,6 @@ const SearchStyled = styled.div`
             }
         }
     }
-    @media screen and (max-width: 875px) {
-        flex-wrap: wrap;
-        margin: 0;
-        flex: 100% 0 0;
-        margin-top: 15px;
-    }
 `
 
 const ExtraMenuStyled = styled.div`
@@ -68,25 +60,12 @@ const ExtraMenuStyled = styled.div`
     .options {
 
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
 
-        .option {
+        li {
             list-style: none;
             display: flex;
             cursor: pointer;
-            white-space: nowrap;
-            background: blue;
-            padding: 3px 5px;
-            min-width: 100px;
-            border: 2px solid #2c3e4e;
-            background: #2c3e4e;
-            color: white;
-            justify-content: center;
-
-            &.active {
-                background: white;
-                color: #2c3e4e;
-            }
 
             input {
                 margin-right: 15px;
@@ -95,14 +74,16 @@ const ExtraMenuStyled = styled.div`
     }
 `
 
-const ExtraMenu = ({open, setOpen, searchOption, setSearchOption}) => {
+const ExtraMenu = ({open, setOpen}) => {
+
+    const [ activeOption, setActiveOption ] = useState('ФИО')
 
     const node = useRef();
 
     const searchOptions = [
-        {name: 'Фамилии', value: 'surname'},
-        {name: 'VIN', value: 'vin'},
-        {name: 'Номеру карты', value: 'cardNumber'},
+        {name: 'ФИО', value: 'name'},
+        {name: 'Стране', value: 'country'},
+        {name: 'Языку', value: 'language'},
     ]
 
     const handleClickOutside = e => {
@@ -131,11 +112,11 @@ const ExtraMenu = ({open, setOpen, searchOption, setSearchOption}) => {
         return (
             <ExtraMenuStyled ref={node}>
                 <p className="info">Искать по: </p>
-                <div className="options">
+                <ul className="options">
                     {searchOptions.map(option => (
-                        <div key={option.value} className={`option ${searchOption === option.value ? 'active' : ''}`} onClick={(e) => setSearchOption(option.value)}>{option.name}</div>
+                        <li key={option.value}><input name="searchOption" type="radio" value={option.value} id={option.value}/><label htmlFor={option.value}>{option.name}</label></li>
                     ))}
-                </div>
+                </ul>
             </ExtraMenuStyled>
         )
     } else {
@@ -146,7 +127,7 @@ const ExtraMenu = ({open, setOpen, searchOption, setSearchOption}) => {
 }
 
 
-const Search = (props) => {
+const Search = () => {
 
     const [ menuActive, setMenuActive ] = useState(false)
 
@@ -157,9 +138,9 @@ const Search = (props) => {
     return (
         <SearchStyled>
             <form onSubmit={onSubmit} onClick={() => setMenuActive(true)} onFocus={() => setMenuActive(true)}>
-                <input value={props.searchValue} onChange={(e) => props.setSearchValue(e.target.value)} placeholder="Поиск" className="search_field"/>
-                <button>{props.searchLoading ? (<Loader type="Puff" color="#fff" height={15} width={15}/>) : (<img alt="Поиск" src={searchIcon}/>)}</button>
-                <ExtraMenu searchOption={props.searchOption} setSearchOption={props.setSearchOption} open={menuActive} setOpen={setMenuActive}/>
+                <input placeholder="Поиск" className="search_field"/>
+                <button><img alt="Поиск" src={searchIcon}/></button>
+                <ExtraMenu open={menuActive} setOpen={setMenuActive}/>
             </form>
         </SearchStyled>
     )

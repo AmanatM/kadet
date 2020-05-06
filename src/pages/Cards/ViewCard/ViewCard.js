@@ -35,18 +35,18 @@ const ViewCard = ({id}) => {
             <div className="content" onClick={(e) => e.stopPropagation()}>
                 {card ? (
 
-                   card.active ? 
+                   card.cardStatus === 1 ? 
                    (
                     <ActiveCard>
                         <h4>Карта активирована</h4>
                         <div className="card-number">
                             <p className="info">Номер карты:</p>
-                            <div className="number">{card.number}</div>
+                            <div className="number">{card.cardNumber}</div>
                         </div>
 
                         <div className="card-holder">
                             <p className="info">Держатель карты:</p>
-                            <div className="holder">{card.cardHolder}</div>
+                            <div className="holder">{card.clientId}</div>
                         </div>
 
                         <h4>Информация об автомобиле:</h4>
@@ -58,7 +58,7 @@ const ViewCard = ({id}) => {
                             <div className="car-vin-container">
                                 <p className="info">VIN машины: </p>
                                 <div className="car-vin">
-                                    <p>{card.VINnumber}</p>
+                                    <p>{card.vin}</p>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@ const ViewCard = ({id}) => {
                             <div className="car-color-container">
                                 <p className="info">Цвет:</p>
                                 <div className="car-color">
-                                    <p>{card.carColor} </p><div style={{backgroundColor: card.carColor}} className="color-box"></div>
+                                    <p>{card.color} </p><div style={{backgroundColor: card.color}} className="color-box"></div>
                                 </div>
                             </div>
                         </div>
@@ -88,18 +88,18 @@ const ViewCard = ({id}) => {
                         </div>
                         <div className="email-container">
                             <p className="info">Email: </p>
-                            <div className="email"><a taget="_blank" href={`mailto:${card.email}`}>{card.email}</a></div>
+                            <div className="email"><a taget="_blank" href={`mailto:${card.clientId}`}>{card.clientId}</a></div>
                         </div>
 
                         <h4>Информация о карте: </h4>
                         <div style={{marginBottom: '20px'}} className=" col-2">
                             <div className="date-activated">
                                 <p className="info">Дата активации: </p>
-                                <div>{parseDate(card.dateActivated)}</div>
+                                <div>{parseDate(card.actionStartDate)}</div>
                             </div>
                             <div className="date-sold">
                                 <p className="info">Дата продажи: </p>
-                                <div>{parseDate(card.dateSold)}</div>
+                                <div>{parseDate(card.dateOfContractWithClient)}</div>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@ const ViewCard = ({id}) => {
                             </div>
                             <div className="price">
                                 <p className="info">Цена карты: </p>
-                                <div>{card.cardPrice}</div>
+                                <div>{card.cardCost}</div>
                             </div>
                         </div>
 

@@ -93,7 +93,6 @@ const StatusSelect = (props) => {
             propName: 'status', value: selection
         }]
         setSelected(selection)
-
     }
 
 
